@@ -1,16 +1,15 @@
 #loads and preprosseses the Dataset
-
-    
+import matplotlib.pyplot as plt
     
 import os
 import tensorflow as tf
 
-def load_dataset(dataset_path, img_size(128,128), batch_size = 16):
+def preprocess_dataset(dataset_path):
     from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
     # Data augmentation 
     train_datagen = ImageDataGenerator(
-        rescale=1./255,  #rescale
+        rescale=1./255, 
         rotation_range=5,  # slight rotation
         width_shift_range=0.05, # 5% horizontal shift
         height_shift_range=0.05, # 5% vertical shift
@@ -43,4 +42,38 @@ def load_dataset(dataset_path, img_size(128,128), batch_size = 16):
         subset='validation',
         shuffle=True
     )
+    
+    return train_generator, validation_generator
+
+def train(epochs, model, dataset_path):
+    train_generator, validation_generator = preprocess_dataset(dataset_path)
+    history = model.fit(
+        train_generator,
+        validation_data = validation_generator,
+        epochs = epochs
+    )
+    show_graphs(history)
+
+
+def show_graphs (history):
+    plt.figure(figsize=(10,4))
+    plt.subplot(1,2,1)
+    plt.plot(history.history['loss'], label='Train Loss')
+    plt.plot(history.history['val_loss'], label='Validation Loss')
+    plt.title('Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend()
+    
+    # Graficar precisión
+    plt.subplot(1,2,2)
+    plt.plot(history.history['accuracy'], label='Train Accuracy')
+    plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+    plt.title('Accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    
+    plt.show()
+    
     
