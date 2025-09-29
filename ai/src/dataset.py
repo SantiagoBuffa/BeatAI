@@ -1,14 +1,5 @@
 #loads and preprosseses the Dataset
 
-
-#PEGAR EN EL COLAB ANTES DE CORRER
-#drive.mount('/content/drive')
-#dataset_path = '/content/drive/MyDrive/beatAI/ECG_DATA'  # cambialo por tu ruta real
-
-#if os.path.exists(dataset_path):
-    #print(f"✅ La carpeta existe: {dataset_path}")
-#else:
-    #print(f"❌ La carpeta no se encuentra. Revisá la ruta: {dataset_path}")
     
     
 import os
