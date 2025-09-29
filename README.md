@@ -17,8 +17,11 @@ Backlog: https://www.notion.so/27d25f08168b80469814f31c2fa9c183?v=27d25f08168b81
 
 
 Equipos del proyecto:
+
     -Frontend: Orlando Valentina Pilar, Bessone Nicolas, Calcagno Mateo.
+    
     -Backend: Raimundo Elias Santiago, Miani Francisco.
+    
     -AI training: Buffa Marcos Santiago, Llorente Mateo.
 
 
