@@ -7,17 +7,25 @@ function App() {
   const [diagnosis, setDiagnosis] = useState(null);
 
   const handleFileUpload = async (file) => {
-    // Por ahora simulamos el análisis con un diagnóstico ficticio
+    // Simulación de diagnóstico
     setDiagnosis("Ritmo sinusal normal. No se detectan anomalías significativas.");
   };
 
   return (
     <div className="App">
-      <header>
-        <h1>Analizador de ECG</h1>
+      <header className="app-header">
+        <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
       </header>
-      <main>
-        <FileUpload onFileUpload={handleFileUpload} />
+
+      <main className="main-container">
+        <div className="upload-box">
+          <div className="upload-icon">
+            <i className="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+        </div>
+
+        <button className="upload-button">CARGAR ECG</button>
+
         <DiagnosisResult diagnosis={diagnosis} />
       </main>
     </div>
