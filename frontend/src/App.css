@@ -4,7 +4,6 @@ body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(to bottom, #e8ecef, #7fe0be);
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,6 +43,8 @@ body {
   justify-content: center;
   margin-bottom: 50px;
   padding: 15px;
+  position: relative;
+  overflow: hidden;
 }
 
 .upload-border {
@@ -137,6 +138,26 @@ body {
   margin-left: 10px;
   vertical-align: middle;
   animation: spin 0.9s linear infinite;
+}
+
+.preview-image { 
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 15px;
+  opacity: 0.5; 
+  object-fit: contain;
+}
+
+.file-name-overlay {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #004d40;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-align: center;
+  z-index: 3;
 }
 
 /* animación */
