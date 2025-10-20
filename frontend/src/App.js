@@ -58,58 +58,79 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="app-header">
-        <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
-      </header>
+  <div className="App">
+    <header className="app-header">
+      <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
+    </header>
 
-      <main className="main-container">
-        {/* Upload Box */}
-        <div
-          className="upload-box"
-          onClick={() => document.getElementById("fileInput").click()}
-        >
-          <div className="upload-border">
-            {preview ? (
-              <>
-                <img src={preview} alt="Vista previa" className="preview-image" />
-                <p className="file-name-overlay">{fileName}</p>
-              </>
-            ) : (
-              <div className="upload-icon">
-                <i className="fa-solid fa-cloud-arrow-up"></i>
-              </div>
-            )}
-          </div>
+    <main className="main-container">
+      {/* Upload Box */}
+      <div
+        className="upload-box"
+        onClick={() => document.getElementById("fileInput").click()}
+      >
+        <div className="upload-border">
+          {preview ? (
+      <>
+        <img src={preview} alt="Vista previa" className="preview-image" />
+        <p className="file-name-overlay">{fileName}</p>
+      </>
+    ) : (
+      <div className="upload-icon">
+        <i className="fa-solid fa-cloud-arrow-up"></i>
+        <p className="upload-text">Subir Archivo</p>
+      </div>
+    )}
 
-          <input
-            id="fileInput"
-            type="file"
-            style={{ display: "none" }}
-            onChange={(e) => handleFileUpload(e.target.files[0])}
-          />
         </div>
-        {/* Botón para analizar */}
+
+        <input
+          id="fileInput"
+          type="file"
+          style={{ display: "none" }}
+          onChange={(e) => handleFileUpload(e.target.files[0])}
+        />
+      </div>
+
+      {/* Botón para analizar */}
+      <button
+        className={`upload-button ${!fileName ? "disabled" : ""} ${loading ? "loading" : ""}`}
+        disabled={!fileName || loading}
+        onClick={() => {
+          if (!fileName) {
+            document.getElementById("fileInput").click();
+          } else {
+            handleAnalyze();
+          }
+        }}
+      >
+        {loading ? "Analizando..." : "ANALIZAR ECG"}
+        {loading && <span className="btn-spinner" aria-hidden="true"></span>}
+      </button>
+
+      {/* 🔹 Nuevo botón para cargar otra imagen */}
+      {preview && !loading && (
         <button
-          className={`upload-button ${!fileName ? "disabled" : ""} ${loading ? "loading" : ""}`}
-          disabled={!fileName || loading}
+          className="secondary-button"
           onClick={() => {
-            if (!fileName) {
-              document.getElementById("fileInput").click();
-            } else {
-              handleAnalyze();
-            }
+            // Resetear estados para permitir nueva carga
+            setPreview(null);
+            setFileName("");
+            setSelectedFile(null);
+            setDiagnosis(null);
+            document.getElementById("fileInput").click();
           }}
         >
-          {loading ? "Analizando..." : "ANALIZAR ECG"}
-          {loading && <span className="btn-spinner" aria-hidden="true"></span>}
+          CARGAR OTRA IMAGEN
         </button>
+      )}
 
-        {/* Resultado del diagnóstico */}
-        <DiagnosisResult diagnosis={diagnosis} />
-      </main>
-    </div>
-  );
+      {/* Resultado del diagnóstico */}
+      <DiagnosisResult diagnosis={diagnosis} />
+    </main>
+  </div>
+);
+
 }
 
 export default App;
