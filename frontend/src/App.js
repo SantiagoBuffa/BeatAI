@@ -6,25 +6,45 @@ function App() {
   const [diagnosis, setDiagnosis] = useState(null);
   const [fileName, setFileName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
 
   const handleFileUpload = async (file) => {
-    if (!file) return;
-    setFileName(file.name);
-  
-    setDiagnosis(null);
-  };
+  if (!file) return;
+  setFileName(file.name);
+  setSelectedFile(file);
+  setDiagnosis(null);
+};
+
 
   const handleAnalyze = async () => {
-  if (!fileName) return; // seguridad
+  if (!selectedFile) return;
 
-  setLoading(true);       // muestra spinner / bloquea botón
-  setDiagnosis(null);     // limpia resultado mientras analiza (opcional)
+  setLoading(true);
+  setDiagnosis(null);
 
-  // Simulación de petición/procesamiento, hay que cambairlo por await fetch / axios despues 
-  setTimeout(() => {
-    setDiagnosis("Ritmo sinusal normal. No se detectan anomalías significativas.");
-    setLoading(false);
-  }, 1800); // 1.8s de simulación
+  const formData = new FormData();
+  formData.append("file", selectedFile);
+
+  try {
+    const response = await fetch("http://127.0.0.1:5000/predict", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      const texto = `Resultado: ${data.class_name} (confianza: ${(data.confidence * 100).toFixed(2)}%)`;
+      setDiagnosis(texto);
+    } else {
+      setDiagnosis("Error del servidor: " + (data.error || "Desconocido"));
+    }
+  } catch (err) {
+    setDiagnosis("Error de conexión con el backend Flask.");
+  }
+
+  setLoading(false);
 };
 
 
