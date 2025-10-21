@@ -1,9 +1,0 @@
-guardamos las librerias que necesitamos para el backend y la ia en requirements.txt
-dentro del repositorio cada uno crea un entorno virtual de python donde descarga esas librerias con "python3 -m venv venv"
-el entorno virtual se activa con source venv/bin/activate (en linux) y se desactiva con deactivate
-dentro del entorno (tiene que decir (venv) en la terminal) se descargan las dependencias con pip install -r requirements.txt
-
-si agregamos mas dependencias las ponemos en el arhcivo requirements.txt y tendria que volver a instalarlas cada uno dentro de su entorno virtual
-
-23/9 cada uno tiene que crear un acceso directo de la carpeta de la pilula en "mi unidad" de drive, para poder acceder
-al dataset dentro de colab
