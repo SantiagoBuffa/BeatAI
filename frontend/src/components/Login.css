@@ -1,0 +1,114 @@
+/* src/components/Login.css */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
+.login-container {
+  text-align: center;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(to bottom, #e8ecef, #7fe0be);
+}
+
+.login-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.65);
+  border-radius: 20px;
+  padding: 40px 50px;
+  box-shadow: 0 6px 18px rgba(0, 191, 165, 0.12);
+  margin-top: 50px;
+  width: 400px;
+}
+
+.login-main h2 {
+  margin-bottom: 25px;
+  color: #004d40;
+  font-weight: 700;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border: 2px solid #a8e6cf;
+  border-radius: 25px;
+  outline: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.login-input:focus {
+  border-color: #00bfa5;
+  box-shadow: 0 0 8px rgba(0, 191, 165, 0.25);
+}
+
+.upload-button {
+  background-color: #00bfa5;
+  color: white;
+  border: 2px solid #00bfa5;
+  border-radius: 25px;
+  padding: 10px 40px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.upload-button:hover {
+  background-color: #05a18d;
+  border-color: #05a18d;
+}
+
+.upload-button.disabled,
+.upload-button:disabled {
+  background-color: #cccccc;
+  border-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.9);
+  border-top-color: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  margin-left: 10px;
+  vertical-align: middle;
+  animation: spin 0.9s linear infinite;
+}
+
+.error-text {
+  color: #c62828;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.logout-btn {
+  background-color: white;
+  color: #00bfa5;
+  border: 2px solid #00bfa5;
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 20px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #00bfa5;
+  color: white;
+}
+
+/* animación */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
