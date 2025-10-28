@@ -1,0 +1,41 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+*.pyo
+*.pyd
+
+# ---- Virtual Environments ----
+venv/
+.env/
+
+# ---- Flask / Instance ----
+instance/
+*.sqlite3
+*.db
+
+# ---- Jupyter Notebooks ----
+.ipynb_checkpoints/
+
+# ---- Logs / Cache ----
+*.log
+.cache/
+*.tmp
+
+# ---- TensorFlow / Modelos ----
+*.h5
+*.hdf5
+*.keras
+*.ckpt
+*.tflite
+
+# ---- IDE / Editor ----
+.vscode/
+.idea/
+*.swp
+
+# ---- Sistema ----
+.DS_Store
+Thumbs.db
