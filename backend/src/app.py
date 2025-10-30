@@ -149,6 +149,7 @@ def preprocess_image(image_bytes, num_rows=4, smooth=True, target_len=2048):
 
     return vector
 
+@app.route("/BeatAI",)
 
 @app.route("/predict", methods=["POST"])
 def predict():
