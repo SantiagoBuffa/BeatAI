@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Login.css"; // reutilizamos el mismo estilo
+import "./SignUp.css";
 
 function SignUp1({ onNext, onSwitchToLogin }) {
   const [dni, setDni] = useState("");
@@ -14,7 +14,6 @@ function SignUp1({ onNext, onSwitchToLogin }) {
       return;
     }
     setError("");
-    // Pasamos los datos al siguiente paso
     onNext({ dni, matricula, nombre, apellido });
   };
 
@@ -24,48 +23,50 @@ function SignUp1({ onNext, onSwitchToLogin }) {
         <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
       </header>
 
-      <main className="login-main">
-        <h2>Registro - Paso 1</h2>
+      <main className="signup-main">
+        <h2>Registro</h2>
         {error && <p className="error-text">{error}</p>}
 
-        <input
-          type="text"
-          placeholder="DNI"
-          value={dni}
-          onChange={(e) => setDni(e.target.value)}
-          className="login-input"
-        />
-        <input
-          type="text"
-          placeholder="N° Matrícula"
-          value={matricula}
-          onChange={(e) => setMatricula(e.target.value)}
-          className="login-input"
-        />
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="login-input"
-        />
-        <input
-          type="text"
-          placeholder="Apellido"
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-          className="login-input"
-        />
+        <div className="signup-grid">
+          <input
+            type="text"
+            placeholder="DNI"
+            value={dni}
+            onChange={(e) => setDni(e.target.value)}
+            className="login-input"
+          />
+          <input
+            type="text"
+            placeholder="N° Matrícula"
+            value={matricula}
+            onChange={(e) => setMatricula(e.target.value)}
+            className="login-input"
+          />
+          <input
+            type="text"
+            placeholder="Nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            className="login-input"
+          />
+          <input
+            type="text"
+            placeholder="Apellido"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            className="login-input"
+          />
+        </div>
 
         <button className="upload-button" onClick={handleNext}>
           Siguiente
         </button>
 
-        <p className="switch-text">
+        <p className="signup-text">
           ¿Ya tenés cuenta?{" "}
-          <button className="switch-link" onClick={onSwitchToLogin}>
+          <span className="signup-link" onClick={onSwitchToLogin}>
             Iniciar sesión
-          </button>
+          </span>
         </p>
       </main>
     </div>

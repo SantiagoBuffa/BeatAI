@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "./Login.css"; 
+import "./Login.css";
 
-function Login({ onLogin }) {
+function Login({ onLogin, onSwitchToSignUp }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,10 +17,10 @@ function Login({ onLogin }) {
     setError("");
 
     try {
-      
+      // Simula login
       setTimeout(() => {
         setLoading(false);
-        onLogin(username); // Notificar a App que el login fue exitoso
+        onLogin(username);
       }, 1000);
     } catch (err) {
       setError(err.message || "Error al iniciar sesión");
@@ -54,13 +54,21 @@ function Login({ onLogin }) {
         />
 
         <button
-          className={'upload-button ${loading ? "loading" : ""}'}
+          className={`upload-button ${loading ? "loading" : ""}`}
           onClick={handleLogin}
           disabled={loading}
         >
           {loading ? "Ingresando..." : "INICIAR SESIÓN"}
           {loading && <span className="btn-spinner" aria-hidden="true"></span>}
         </button>
+
+        {/* 🔹 Enlace a Registro */}
+        <p className="signup-text">
+          ¿No tienes cuenta?{" "}
+          <span className="signup-link" onClick={onSwitchToSignUp}>
+            Registrarse
+          </span>
+        </p>
       </main>
     </div>
   );
