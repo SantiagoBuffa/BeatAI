@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import DiagnosisResult from "./components/DiagnosisResult";
 import Login from "./components/Login";
+import SignUp1 from "./components/SignUp1";
+import SignUp2 from "./components/SignUp2";
 import "./App.css";
 
 function App() {
-  const [user, setUser] = useState(null); // <-- Estado de usuario logueado
+  const [user, setUser] = useState(null); // usuario logueado
+  const [signUpStep, setSignUpStep] = useState(null); // controla el paso del registro
+  const [signUpData, setSignUpData] = useState({}); // guarda datos del registro
   const [diagnosis, setDiagnosis] = useState(null);
   const [fileName, setFileName] = useState("");
   const [preview, setPreview] = useState(null);
@@ -25,7 +29,7 @@ function App() {
       };
       reader.readAsDataURL(file);
     } else {
-      setPreview(null); 
+      setPreview(null);
     }
   };
 
@@ -60,18 +64,51 @@ function App() {
   };
 
   // ------------------- RENDER -------------------
+
+  // 🔹 Si NO hay usuario logueado, mostramos Login o SignUp
   if (!user) {
-    // Pantalla de Login
-    return <Login onLogin={(username) => setUser(username)} />;
+    // Paso 1 del registro
+    if (signUpStep === 1) {
+      return (
+        <SignUp1
+          onNext={(data) => {
+            setSignUpData(data);
+            setSignUpStep(2);
+          }}
+          onSwitchToLogin={() => setSignUpStep(null)}
+        />
+      );
+    }
+
+    // Paso 2 del registro
+    if (signUpStep === 2) {
+      return (
+        <SignUp2
+          userData={signUpData}
+          onRegister={(finalData) => {
+            console.log("✅ Datos finales del registro:", finalData);
+            setSignUpStep(null); // vuelve al login
+          }}
+          onBack={() => setSignUpStep(1)}
+          onSwitchToLogin={() => setSignUpStep(null)}
+        />
+      );
+    }
+
+    // Login normal
+    return <Login onLogin={setUser} onSwitchToSignUp={() => setSignUpStep(1)} />;
   }
 
-  // Pantalla principal de ECG
+  // 🔹 Si hay usuario logueado → pantalla principal del ECG
   return (
     <div className="App">
       <header className="app-header">
         <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
         <div className="user-greeting">
-          Hola, {user} <button onClick={() => setUser(null)} className="logout-btn">Cerrar sesión</button>
+          Hola, {user}
+          <button onClick={() => setUser(null)} className="logout-btn">
+            Cerrar sesión
+          </button>
         </div>
       </header>
 
@@ -105,7 +142,7 @@ function App() {
 
         {/* Botón para analizar */}
         <button
-          className={'upload-button ${!fileName ? "disabled" : ""} ${loading ? "loading" : ""}'}
+          className={`upload-button ${!fileName ? "disabled" : ""} ${loading ? "loading" : ""}`}
           disabled={!fileName || loading}
           onClick={() => {
             if (!fileName) {
