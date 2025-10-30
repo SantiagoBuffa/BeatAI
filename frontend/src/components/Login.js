@@ -54,7 +54,7 @@ function Login({ onLogin }) {
         />
 
         <button
-          className={upload-button ${loading ? "loading" : ""}}
+          className={'upload-button ${loading ? "loading" : ""}'}
           onClick={handleLogin}
           disabled={loading}
         >

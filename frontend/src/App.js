@@ -47,7 +47,7 @@ function App() {
       const data = await response.json();
 
       if (response.ok) {
-        const texto = Resultado: ${data.class_name} (confianza: ${(data.confidence * 100).toFixed(2)}%);
+        const texto = `Resultado: ${data.class_name} (confianza: ${(data.confidence * 100).toFixed(2)}%)`;
         setDiagnosis(texto);
       } else {
         setDiagnosis("Error del servidor: " + (data.error || "Desconocido"));
@@ -105,7 +105,7 @@ function App() {
 
         {/* Botón para analizar */}
         <button
-          className={upload-button ${!fileName ? "disabled" : ""} ${loading ? "loading" : ""}}
+          className={'upload-button ${!fileName ? "disabled" : ""} ${loading ? "loading" : ""}'}
           disabled={!fileName || loading}
           onClick={() => {
             if (!fileName) {
