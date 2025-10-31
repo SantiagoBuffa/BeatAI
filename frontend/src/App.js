@@ -6,16 +6,16 @@ import SignUp2 from "./components/SignUp2";
 import "./App.css";
 
 function App() {
-  const [user, setUser] = useState(null); // usuario logueado
-  const [signUpStep, setSignUpStep] = useState(null); // controla el paso del registro
-  const [signUpData, setSignUpData] = useState({}); // guarda datos del registro
+  const [user, setUser] = useState(null);
+  const [signUpStep, setSignUpStep] = useState(null);
+  const [signUpData, setSignUpData] = useState({});
   const [diagnosis, setDiagnosis] = useState(null);
   const [fileName, setFileName] = useState("");
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // ----------- Funciones de ECG ----------------
   const handleFileUpload = async (file) => {
     if (!file) return;
     setFileName(file.name);
@@ -24,9 +24,7 @@ function App() {
 
     if (file.type.startsWith("image/")) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
+      reader.onloadend = () => setPreview(reader.result);
       reader.readAsDataURL(file);
     } else {
       setPreview(null);
@@ -56,18 +54,16 @@ function App() {
       } else {
         setDiagnosis("Error del servidor: " + (data.error || "Desconocido"));
       }
-    } catch (err) {
+    } catch {
       setDiagnosis("Error de conexión con el backend Flask.");
     }
 
     setLoading(false);
   };
 
-  // ------------------- RENDER -------------------
+  // ----------- Render -----------
 
-  // 🔹 Si NO hay usuario logueado, mostramos Login o SignUp
   if (!user) {
-    // Paso 1 del registro
     if (signUpStep === 1) {
       return (
         <SignUp1
@@ -80,14 +76,13 @@ function App() {
       );
     }
 
-    // Paso 2 del registro
     if (signUpStep === 2) {
       return (
         <SignUp2
           userData={signUpData}
           onRegister={(finalData) => {
             console.log("✅ Datos finales del registro:", finalData);
-            setSignUpStep(null); // vuelve al login
+            setSignUpStep(null);
           }}
           onBack={() => setSignUpStep(1)}
           onSwitchToLogin={() => setSignUpStep(null)}
@@ -95,25 +90,47 @@ function App() {
       );
     }
 
-    // Login normal
     return <Login onLogin={setUser} onSwitchToSignUp={() => setSignUpStep(1)} />;
   }
 
-  // 🔹 Si hay usuario logueado → pantalla principal del ECG
   return (
     <div className="App">
       <header className="app-header">
-        <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
-        <div className="user-greeting">
-          Hola, {user}
-          <button onClick={() => setUser(null)} className="logout-btn">
-            Cerrar sesión
-          </button>
+        {/* 🔹 Botón de menú (toggle) */}
+        <div
+          className="menu-icon"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          <div className="line"></div>
+          <div className="line"></div>
+          <div className="line"></div>
         </div>
+
+        <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
       </header>
 
+      {/* 🔹 Sidebar con overlay */}
+      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <div className="sidebar-content">
+          <p className="sidebar-user">👤 {user}</p>
+          <button className="sidebar-button">Historial</button>
+
+          <div className="sidebar-bottom">
+            <button className="logout-btn" onClick={() => setUser(null)}>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
+
       <main className="main-container">
-        {/* Upload Box */}
         <div
           className="upload-box"
           onClick={() => document.getElementById("fileInput").click()}
@@ -140,23 +157,19 @@ function App() {
           />
         </div>
 
-        {/* Botón para analizar */}
         <button
           className={`upload-button ${!fileName ? "disabled" : ""} ${loading ? "loading" : ""}`}
           disabled={!fileName || loading}
-          onClick={() => {
-            if (!fileName) {
-              document.getElementById("fileInput").click();
-            } else {
-              handleAnalyze();
-            }
-          }}
+          onClick={() =>
+            !fileName
+              ? document.getElementById("fileInput").click()
+              : handleAnalyze()
+          }
         >
           {loading ? "Analizando..." : "ANALIZAR ECG"}
           {loading && <span className="btn-spinner" aria-hidden="true"></span>}
         </button>
 
-        {/* Botón para cargar otra imagen */}
         {preview && !loading && (
           <button
             className="secondary-button"
@@ -172,7 +185,6 @@ function App() {
           </button>
         )}
 
-        {/* Resultado del diagnóstico */}
         <DiagnosisResult diagnosis={diagnosis} />
       </main>
     </div>
