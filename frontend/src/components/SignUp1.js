@@ -4,17 +4,16 @@ import "./SignUp.css";
 function SignUp1({ onNext, onSwitchToLogin }) {
   const [dni, setDni] = useState("");
   const [matricula, setMatricula] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
+  const [nombreCompleto, setNombreCompleto] = useState("");
   const [error, setError] = useState("");
 
   const handleNext = () => {
-    if (!dni || !matricula || !nombre || !apellido) {
+    if (!dni || !matricula || !nombreCompleto) {
       setError("Por favor, completá todos los campos");
       return;
     }
     setError("");
-    onNext({ dni, matricula, nombre, apellido });
+    onNext({ dni, matricula, nombreCompleto });
   };
 
   return (
@@ -33,30 +32,24 @@ function SignUp1({ onNext, onSwitchToLogin }) {
             placeholder="DNI"
             value={dni}
             onChange={(e) => setDni(e.target.value)}
-            className="login-input"
+            className="signup-input"
           />
           <input
             type="text"
             placeholder="N° Matrícula"
             value={matricula}
             onChange={(e) => setMatricula(e.target.value)}
-            className="login-input"
-          />
-          <input
-            type="text"
-            placeholder="Nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            className="login-input"
-          />
-          <input
-            type="text"
-            placeholder="Apellido"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
-            className="login-input"
+            className="signup-input"
           />
         </div>
+
+        <input
+          type="text"
+          placeholder="Nombre y Apellido"
+          value={nombreCompleto}
+          onChange={(e) => setNombreCompleto(e.target.value)}
+          className="signup-input"
+        />
 
         <button className="upload-button" onClick={handleNext}>
           Siguiente

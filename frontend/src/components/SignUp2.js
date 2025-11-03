@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Login.css";
+import "./SignUp.css"; // reutilizamos el mismo CSS que SignUp1
 
 function SignUp2({ userData, onRegister, onBack, onSwitchToLogin }) {
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ function SignUp2({ userData, onRegister, onBack, onSwitchToLogin }) {
     setError("");
     setLoading(true);
 
-    // Simula un registro exitoso
+    // Simula registro exitoso
     setTimeout(() => {
       setLoading(false);
       onRegister({ ...userData, email, password });
@@ -34,7 +34,7 @@ function SignUp2({ userData, onRegister, onBack, onSwitchToLogin }) {
         <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
       </header>
 
-      <main className="login-main">
+      <main className="signup-main">
         <h2>Registro - Paso 2</h2>
         {error && <p className="error-text">{error}</p>}
 
@@ -43,42 +43,26 @@ function SignUp2({ userData, onRegister, onBack, onSwitchToLogin }) {
           placeholder="Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="login-input"
+          className="signup-input"
         />
         <input
           type="password"
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="login-input"
+          className="signup-input"
         />
         <input
           type="password"
           placeholder="Confirmar contraseña"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className="login-input"
+          className="signup-input"
         />
 
-        <button
-          className={`upload-button ${loading ? "loading" : ""}`}
-          onClick={handleRegister}
-          disabled={loading}
-        >
+        <button className="upload-button" onClick={handleRegister} disabled={loading}>
           {loading ? "Registrando..." : "Registrarse"}
-          {loading && <span className="btn-spinner" aria-hidden="true"></span>}
         </button>
-
-        <button className="secondary-button" onClick={onBack}>
-          Volver
-        </button>
-
-        <p className="switch-text">
-          ¿Ya tenés cuenta?{" "}
-          <button className="switch-link" onClick={onSwitchToLogin}>
-            Iniciar sesión
-          </button>
-        </p>
       </main>
     </div>
   );

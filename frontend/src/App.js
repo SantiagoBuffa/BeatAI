@@ -21,6 +21,7 @@ function App() {
     setFileName(file.name);
     setSelectedFile(file);
     setDiagnosis(null);
+    
 
     if (file.type.startsWith("image/")) {
       const reader = new FileReader();
