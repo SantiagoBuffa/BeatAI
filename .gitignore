@@ -39,3 +39,4 @@ instance/
 # ---- Sistema ----
 .DS_Store
 Thumbs.db
+frontend/node_modules/

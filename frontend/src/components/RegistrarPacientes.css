@@ -1,0 +1,98 @@
+/* Contenedor general */
+.rp-container {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 121, 107, 0.20);
+  font-family: "Arial", sans-serif;
+}
+
+/* Título */
+.rp-title {
+  text-align: center;
+  font-size: 26px;
+  color: #00695c;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+/* Formulario general */
+.rp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Labels */
+.rp-label {
+  font-weight: bold;
+  color: #004d40;
+}
+
+/* Inputs */
+.rp-input {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #a7dcd2;
+  background-color: #f4fafaff;   /* más claro */
+  border-radius: 10px;
+  transition: 0.3s ease;
+}
+
+.rp-input:focus {
+  outline: none;
+  border-color: #00bfa5;
+  background-color: #ffffff;
+  box-shadow: 0 0 6px rgba(0, 191, 165, 0.4);
+}
+
+/* Obra social */
+.rp-insurance-box {
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #f4fafaff;
+  border: 1px solid #b5e6df;
+  margin-top: 10px;
+}
+
+.rp-insurance-title {
+  font-size: 20px;
+  color: #00796b;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+/* GRID dos columnas con más espacio */
+.rp-insurance-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px 40px;   /* separación aumentada */
+  margin-top: 10px;
+}
+
+.rp-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Botón */
+.rp-button {
+  margin-top: 20px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background-color: #00bfa5;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.rp-button:hover {
+  background-color: #009e8d;
+}
+
+

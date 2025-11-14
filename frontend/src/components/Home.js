@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DiagnosisResult from "./DiagnosisResult";
-import "../App.css";
+import "./Home.css";
 
 function Home() {
   const [diagnosis, setDiagnosis] = useState(null);
@@ -71,10 +71,42 @@ function Home() {
       {/* SIDEBAR */}
       <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-content">
-          <button className="sidebar-button">Historial</button>
+
+          <button
+            className="sidebar-button"
+            onClick={() => {
+              setSidebarOpen(false);
+              window.location.href = "/registrar";
+            }}
+          >
+            Registrar Pacientes
+          </button>
+
+          <button
+            className="sidebar-button"
+            onClick={() => {
+              setSidebarOpen(false);
+              window.location.href = "/pacientes";
+            }}
+          >
+            Ver Pacientes
+          </button>
+
+          <button
+            className="sidebar-button"
+            onClick={() => {
+              setSidebarOpen(false);
+              window.location.href = "/historial";
+            }}
+          >
+            Historial
+          </button>
 
           <div className="sidebar-bottom">
-            <button className="logout-btn" onClick={() => window.location.href = "/"}>
+            <button
+              className="logout-btn"
+              onClick={() => (window.location.href = "/")}
+            >
               Cerrar sesión
             </button>
           </div>
@@ -117,7 +149,9 @@ function Home() {
         </div>
 
         <button
-          className={`upload-button ${!fileName ? "disabled" : ""} ${loading ? "loading" : ""}`}
+          className={`upload-button ${!fileName ? "disabled" : ""} ${
+            loading ? "loading" : ""
+          }`}
           disabled={!fileName || loading}
           onClick={() =>
             !fileName

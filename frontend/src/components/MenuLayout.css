@@ -1,0 +1,117 @@
+/* ====== Menú hamburguesa ====== */
+.menu-icon {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  cursor: pointer;
+  z-index: 1101;
+  transition: transform 0.2s ease;
+}
+.menu-icon:hover {
+  transform: scale(1.1);
+}
+.menu-icon .line {
+  width: 28px;
+  height: 3px;
+  background-color: black;
+  margin: 5px 0;
+  border-radius: 2px;
+}
+
+/* ===== SIDEBAR  ===== */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 260px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.18);
+  transition: left 0.35s cubic-bezier(0.25, 1, 0.3, 1);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 0 20px 20px 0;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+/* ===== CONTENIDO ===== */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-top: 60px;
+  gap: 20px;
+}
+
+/* ===== BOTONES DEL SIDEBAR ===== */
+.sidebar-button {
+  background: rgba(0, 191, 165, 0.12);      /* verde turquesa suave */
+  color: #00695c;                           /* verde más oscuro */
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 191, 165, 0.25);
+  font-size: 17px;
+  cursor: pointer;
+  text-align: left;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0, 191, 165, 0.15);
+}
+
+.sidebar-button:hover {
+  background: rgba(0, 191, 165, 0.25);
+  transform: translateX(5px);
+}
+
+/* ===== BOTÓN CERRAR SESIÓN ===== */
+.sidebar-bottom {
+  margin-top: auto;
+  padding-bottom: 25px;
+}
+
+.logout-btn {
+  background: #00bfa5;
+  color: white;
+  border: none;
+  width: 90%;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 191, 165, 0.35);
+}
+
+.logout-btn:hover {
+  background: #009882;
+  transform: translateY(-3px);
+}
+
+/* ===== OVERLAY ===== */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.28);
+  z-index: 1099;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
