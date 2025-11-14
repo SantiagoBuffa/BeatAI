@@ -1,7 +1,12 @@
 import React, { useState } from "react";
-import "./SignUp.css"; // reutilizamos el mismo CSS que SignUp1
+import "./SignUp.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
-function SignUp2({ userData, onRegister, onBack, onSwitchToLogin }) {
+function SignUp2() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userData = location.state;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,10 +26,9 @@ function SignUp2({ userData, onRegister, onBack, onSwitchToLogin }) {
     setError("");
     setLoading(true);
 
-    // Simula registro exitoso
     setTimeout(() => {
       setLoading(false);
-      onRegister({ ...userData, email, password });
+      navigate("/"); 
     }, 1000);
   };
 
@@ -45,20 +49,23 @@ function SignUp2({ userData, onRegister, onBack, onSwitchToLogin }) {
           onChange={(e) => setEmail(e.target.value)}
           className="signup-input"
         />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="signup-input"
-        />
-        <input
-          type="password"
-          placeholder="Confirmar contraseña"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="signup-input"
-        />
+
+        <div className="signup-grid">
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="signup-input"
+          />
+          <input
+            type="password"
+            placeholder="Confirmar contraseña"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="signup-input"
+          />
+        </div>
 
         <button className="upload-button" onClick={handleRegister} disabled={loading}>
           {loading ? "Registrando..." : "Registrarse"}

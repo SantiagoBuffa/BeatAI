@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import "./SignUp.css";
+import { useNavigate } from "react-router-dom";
 
-function SignUp1({ onNext, onSwitchToLogin }) {
+function SignUp1() {
+  const navigate = useNavigate();
+
   const [dni, setDni] = useState("");
   const [matricula, setMatricula] = useState("");
   const [nombreCompleto, setNombreCompleto] = useState("");
@@ -13,7 +16,10 @@ function SignUp1({ onNext, onSwitchToLogin }) {
       return;
     }
     setError("");
-    onNext({ dni, matricula, nombreCompleto });
+
+    navigate("/signup2", {
+      state: { dni, matricula, nombreCompleto },
+    });
   };
 
   return (
@@ -57,7 +63,7 @@ function SignUp1({ onNext, onSwitchToLogin }) {
 
         <p className="signup-text">
           ¿Ya tenés cuenta?{" "}
-          <span className="signup-link" onClick={onSwitchToLogin}>
+          <span className="signup-link" onClick={() => navigate("/")}>
             Iniciar sesión
           </span>
         </p>

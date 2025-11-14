@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
-function Login({ onLogin, onSwitchToSignUp }) {
+function Login() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!username || !password) {
       setError("Por favor, completa todos los campos");
       return;
@@ -16,16 +19,11 @@ function Login({ onLogin, onSwitchToSignUp }) {
     setLoading(true);
     setError("");
 
-    try {
-      // Simula login
-      setTimeout(() => {
-        setLoading(false);
-        onLogin(username);
-      }, 1000);
-    } catch (err) {
-      setError(err.message || "Error al iniciar sesión");
+    // Simula login
+    setTimeout(() => {
       setLoading(false);
-    }
+      navigate("/home"); // 🔥 Navegar a Home
+    }, 1000);
   };
 
   return (
@@ -62,10 +60,9 @@ function Login({ onLogin, onSwitchToSignUp }) {
           {loading && <span className="btn-spinner" aria-hidden="true"></span>}
         </button>
 
-        {/* 🔹 Enlace a Registro */}
         <p className="signup-text">
           ¿No tienes cuenta?{" "}
-          <span className="signup-link" onClick={onSwitchToSignUp}>
+          <span className="signup-link" onClick={() => navigate("/signup1")}>
             Registrarse
           </span>
         </p>
