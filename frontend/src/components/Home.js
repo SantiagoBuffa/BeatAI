@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DiagnosisResult from "./DiagnosisResult";
+import DiagnosisModal from "./DiagnosisModal";
 import "./Home.css";
 
 function Home() {
@@ -71,7 +71,6 @@ function Home() {
       {/* SIDEBAR */}
       <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-content">
-
           <button
             className="sidebar-button"
             onClick={() => {
@@ -178,7 +177,13 @@ function Home() {
           </button>
         )}
 
-        <DiagnosisResult diagnosis={diagnosis} />
+        {/* MODAL DE DIAGNÓSTICO */}
+        {diagnosis && (
+          <DiagnosisModal
+            diagnosis={diagnosis}
+            onClose={() => setDiagnosis(null)}
+          />
+        )}
       </main>
     </div>
   );

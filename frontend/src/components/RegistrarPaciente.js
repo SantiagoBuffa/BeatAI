@@ -85,35 +85,14 @@ function RegistrarPacientes() {
             required
           />
 
-          <label className="rp-label">DNI del Doctor</label>
-          <input
-            className="rp-input"
-            type="text"
-            name="doctor_dni"
-            value={formData.doctor_dni}
-            onChange={handleChange}
-            required
-          />
-
           {/* --- OBRA SOCIAL --- */}
           <div className="rp-insurance-box">
             <div className="rp-insurance-title">Obra Social</div>
 
             <div className="rp-insurance-grid">
-              <div className="rp-form-group">
-                <label className="rp-label">Nombre</label>
-                <input
-                  className="rp-input"
-                  type="text"
-                  name="insurance_name"
-                  value={formData.insurance_name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
 
               <div className="rp-form-group">
-                <label className="rp-label">Nro Afiliado</label>
+                <label className="rp-label"> Nro Afiliado</label>
                 <input
                   className="rp-input"
                   type="text"
@@ -125,7 +104,7 @@ function RegistrarPacientes() {
               </div>
 
               <div className="rp-form-group">
-                <label className="rp-label">Plan</label>
+                <label className="rp-label"> Plan</label>
                 <input
                   className="rp-input"
                   type="text"
