@@ -7,7 +7,6 @@ function RegistrarPacientes() {
     dni: "",
     name: "",
     date_of_birth: "",
-    doctor_dni: "",
     insurance_name: "",
     insurance_member: "",
     insurance_plan: "",
@@ -23,11 +22,17 @@ function RegistrarPacientes() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const doctorDni = localStorage.getItem("doctor_dni");
+
+    if (!doctorDni) {
+      alert("Error: no se encontró el DNI del doctor. Volvé a iniciar sesión.");
+      return;
+    }
+
     const payload = {
       dni: formData.dni,
       name: formData.name,
       date_of_birth: formData.date_of_birth,
-      doctor_dni: formData.doctor_dni,
       health_insurance: {
         name: formData.insurance_name,
         nro_member: formData.insurance_member,
@@ -36,11 +41,14 @@ function RegistrarPacientes() {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/register_patient", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        `http://127.0.0.1:5000/patients/register_patient/${doctorDni}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await response.json();
       alert(data.message);
@@ -90,7 +98,6 @@ function RegistrarPacientes() {
             <div className="rp-insurance-title">Obra Social</div>
 
             <div className="rp-insurance-grid">
-
               <div className="rp-form-group">
                 <label className="rp-label"> Nombre</label>
                 <input

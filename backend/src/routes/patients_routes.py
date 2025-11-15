@@ -8,8 +8,8 @@ from src.models.healthInsurance import HealthInsurance
 patient_bp = Blueprint('patient', __name__, url_prefix="/patients")
 
 
-@patient_bp.route('/register_patient', methods=['POST'])
-def register_patient():
+@patient_bp.route('/register_patient/<string:doctor_dni>', methods=['POST'])
+def register_patient(doctor_dni):
     data = request.get_json()
 
     existing_insurance = HealthInsurance.query.filter_by(name=data['health_insurance']['name']).first()
@@ -31,7 +31,7 @@ def register_patient():
         dni=data['dni'],
         name=data['name'],
         date_of_birth=datetime.strptime(data['date_of_birth'], '%Y-%m-%d'),
-        doctor_dni=data['doctor_dni'],
+        doctor_dni= doctor_dni,
         health_insurance_id=insurance_id
     )
 
