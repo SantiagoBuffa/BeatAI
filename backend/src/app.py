@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 import numpy as np
 from PIL import Image
@@ -12,13 +14,10 @@ from src.routes.doctor_routes import doctor_bp
 from src.routes.patients_routes import patient_bp
 
 
-
-
-
 app = Flask(__name__)
 CORS(app) # permite llamadas desde el frontend
 
-# ✅ Configuración de la base de datos SQLite
+# Configuración de la base de datos SQLite
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'beat_ai.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # (opcional, evita warnings)
@@ -30,16 +29,19 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+#Registra las rutas
 app.register_blueprint(doctor_bp)
 app.register_blueprint(patient_bp)
 
-# cargar el modelo entrenado
 
 # Ruta absoluta al modelo
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-MODEL_PATH = os.path.join(BASE_DIR, "models", "ecg_modelVectores2048.h5")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "modelVGGV2.keras")
 
+# cargar el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
+
+predict_datagen = ImageDataGenerator(rescale=1./255)
 
 def preprocess_image(image_bytes):
     img_height, img_width = 390, 550
@@ -48,10 +50,16 @@ def preprocess_image(image_bytes):
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     img = img.resize((img_width, img_height))
 
-    img_array = np.array(img).astype("float32") / 255.0
+    img_array = img_to_array(img)
+
+    # Expandir dims para que parezca un batch de 1
     img_array = np.expand_dims(img_array, axis=0)
 
+    # Aplicar el preprocesamiento EXACTO al de test_generator
+    img_array = predict_datagen.standardize(img_array)
+    
     return img_array
+
 
 @app.route("/BeatAI",)
 
