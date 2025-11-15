@@ -10,7 +10,7 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!username || !password) {
       setError("Por favor, completa todos los campos");
       return;
@@ -19,12 +19,35 @@ function Login() {
     setLoading(true);
     setError("");
 
-    // Simula login
-    setTimeout(() => {
+    try {
+      const response = await fetch("http://localhost:5000/doctor/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          license: username,
+          password_hash: password
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Credenciales incorrectas");
+        setLoading(false);
+        return;
+      }
+      localStorage.setItem("doctor_dni", data.dni);
+
+      navigate("/home");
+    }catch (error) {
+      console.error(error);
+      setError("Error al conectar con el servidor");
+    } finally {
       setLoading(false);
-      navigate("/home"); // 🔥 Navegar a Home
-    }, 1000);
+    }
   };
+
+    
 
   return (
     <div className="login-container">

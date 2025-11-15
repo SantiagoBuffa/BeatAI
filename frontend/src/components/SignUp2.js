@@ -13,24 +13,50 @@ function SignUp2() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = () => {
-    if (!email || !password || !confirmPassword) {
-      setError("Por favor, completá todos los campos");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden");
-      return;
-    }
+  const handleRegister = async () => {
+  if (!email || !password || !confirmPassword) {
+    setError("Por favor, completá todos los campos");
+    return;
+  }
+  if (password !== confirmPassword) {
+    setError("Las contraseñas no coinciden");
+    return;
+  }
 
-    setError("");
-    setLoading(true);
+  setError("");
+  setLoading(true);
 
-    setTimeout(() => {
+  try {
+    const response = await fetch("http://localhost:5000/doctor/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        dni: userData.dni,
+        name: userData.nombreCompleto,
+        license: userData.matricula,
+        email: email,
+        password_hash: password
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.error || "Ocurrió un error en el registro");
       setLoading(false);
-      navigate("/"); 
-    }, 1000);
-  };
+      return;
+    }
+
+    // Registro exitoso
+    navigate("/");
+  } catch (error) {
+    console.error(error);
+    setError("Error al conectar con el servidor");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="login-container">

@@ -1,13 +1,14 @@
 from datetime import datetime
 from flask import Blueprint, request, jsonify
-from models.patient import Patient
-from models.diagnosis import Diagnosis
+from src.models.patient import Patient
+from src.models.diagnosis import Diagnosis
 from ..database import db
-from models.healthInsurance import HealthInsurance
+from src.models.healthInsurance import HealthInsurance
 
-patient_routes = Blueprint('patient_routes', __name__)
+patient_bp = Blueprint('patient', __name__, url_prefix="/patient")
 
-@patient_routes.route('/register_patient', methods=['POST'])
+
+@patient_bp.route('/register_patient', methods=['POST'])
 def register_patient():
     data = request.get_json()
 
