@@ -5,7 +5,7 @@ from src.models.diagnosis import Diagnosis
 from ..database import db
 from src.models.healthInsurance import HealthInsurance
 
-patient_bp = Blueprint('patient', __name__, url_prefix="/patient")
+patient_bp = Blueprint('patient', __name__, url_prefix="/patients")
 
 
 @patient_bp.route('/register_patient', methods=['POST'])
@@ -41,7 +41,7 @@ def register_patient():
     return jsonify({'message': 'Paciente y obra social registrados correctamente'}), 201
 
 
-@patient_routes.route('/add_diagnosis', methods=['POST'])
+@patient_bp.route('/add_diagnosis', methods=['POST'])
 def add_diagnosis():
     data = request.get_json()
     patient = Patient.query.filter_by(dni=data['dni']).first()
@@ -58,7 +58,7 @@ def add_diagnosis():
     db.session.commit()
     return jsonify({'message': 'Diagnóstico agregado correctamente'})
 
-@patient_routes.route('/patients', methods=['GET'])
+@patient_bp.route('/patients', methods=['GET'])
 def get_all_patients():
     patients = Patient.query.all()
     return jsonify([
@@ -78,7 +78,7 @@ def get_all_patients():
     ])
 
 
-@patient_routes.route('/patients/<string:dni>', methods=['GET']) #Permite buscar un paciente directamente desde el front con GET /patients/12345678.
+@patient_bp.route('/patients/<string:dni>', methods=['GET']) #Permite buscar un paciente directamente desde el front con GET /patients/12345678.
 def get_patient_by_dni(dni):
     patient = Patient.query.filter_by(dni=dni).first()
     if not patient:
@@ -98,7 +98,7 @@ def get_patient_by_dni(dni):
         }
     })
 
-@patient_routes.route('/patients/<string:dni>/diagnoses', methods=['GET'])
+@patient_bp.route('/patients/<string:dni>/diagnoses', methods=['GET'])
 def get_diagnoses_by_patient(dni):
     patient = Patient.query.filter_by(dni=dni).first()
     if not patient:
@@ -113,4 +113,24 @@ def get_diagnoses_by_patient(dni):
             'fecha': d.fecha.strftime('%Y-%m-%d %H:%M:%S')
         }
         for d in diagnoses
+    ])
+
+@patient_bp.route('/doctor/<string:doctor_dni>', methods=['GET'])
+def get_patients_by_doctor(doctor_dni):
+    patients = Patient.query.filter_by(doctor_dni=doctor_dni).all()
+
+    return jsonify([
+        {
+            'id': p.id,
+            'dni': p.dni,
+            'name': p.name,
+            'date_of_birth': p.date_of_birth.strftime('%Y-%m-%d'),
+            'doctor_dni': p.doctor_dni,
+            'health_insurance': {
+                'name': p.health_insurance.name if p.health_insurance else None,
+                'nro_plan': p.health_insurance.nro_plan if p.health_insurance else None,
+                'nro_member': p.health_insurance.nro_member if p.health_insurance else None
+            }
+        }
+        for p in patients
     ])

@@ -9,7 +9,7 @@ import cv2
 from src.models import Doctor, Patient, Diagnosis, HealthInsurance
 from src.database import db
 from src.routes.doctor_routes import doctor_bp
-
+from src.routes.patients_routes import patient_bp
 
 
 
@@ -31,13 +31,13 @@ with app.app_context():
     db.create_all()
 
 app.register_blueprint(doctor_bp)
- 
+app.register_blueprint(patient_bp)
 
 # cargar el modelo entrenado
 
 # Ruta absoluta al modelo
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-MODEL_PATH = os.path.join(BASE_DIR, "models", "modelVGGV1final.keras")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "ecg_modelVectores2048.h5")
 
 model = tf.keras.models.load_model(MODEL_PATH)
 
