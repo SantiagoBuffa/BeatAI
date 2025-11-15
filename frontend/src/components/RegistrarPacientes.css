@@ -22,7 +22,7 @@
 .rp-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 10px;
 }
 
 /* Labels */
@@ -68,7 +68,7 @@
 .rp-insurance-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 25px 40px;   /* separación aumentada */
+  gap: 10px 30px;   /* separación aumentada */
   margin-top: 10px;
 }
 

@@ -24,7 +24,7 @@ function MenuLayout({ children }) {
             Registrar Paciente
           </button>
 
-          <button className="sidebar-button" onClick={() => navigate("/ver")}>
+          <button className="sidebar-button" onClick={() => navigate("/pacientes")}>
             Ver Pacientes
           </button>
 

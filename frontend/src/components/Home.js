@@ -8,7 +8,6 @@ function Home() {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleFileUpload = async (file) => {
     if (!file) return;
@@ -59,65 +58,9 @@ function Home() {
     <div className="App">
       {/* HEADER */}
       <header className="app-header">
-        <div className="menu-icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
-          <div className="line"></div>
-          <div className="line"></div>
-          <div className="line"></div>
-        </div>
-
+    
         <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
       </header>
-
-      {/* SIDEBAR */}
-      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-        <div className="sidebar-content">
-          <button
-            className="sidebar-button"
-            onClick={() => {
-              setSidebarOpen(false);
-              window.location.href = "/registrar";
-            }}
-          >
-            Registrar Pacientes
-          </button>
-
-          <button
-            className="sidebar-button"
-            onClick={() => {
-              setSidebarOpen(false);
-              window.location.href = "/pacientes";
-            }}
-          >
-            Ver Pacientes
-          </button>
-
-          <button
-            className="sidebar-button"
-            onClick={() => {
-              setSidebarOpen(false);
-              window.location.href = "/historial";
-            }}
-          >
-            Historial
-          </button>
-
-          <div className="sidebar-bottom">
-            <button
-              className="logout-btn"
-              onClick={() => (window.location.href = "/")}
-            >
-              Cerrar sesión
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {sidebarOpen && (
-        <div
-          className="sidebar-overlay"
-          onClick={() => setSidebarOpen(false)}
-        ></div>
-      )}
 
       {/* MAIN */}
       <main className="main-container">

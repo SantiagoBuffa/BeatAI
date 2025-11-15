@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import MenuLayout from "./MenuLayout"; 
 import "./RegistrarPacientes.css";
 
 function RegistrarPacientes() {
@@ -58,7 +57,6 @@ function RegistrarPacientes() {
   };
 
   return (
-    <MenuLayout>
       <div className="rp-container">
         <h2 className="rp-title">Registrar Paciente</h2>
 
@@ -139,7 +137,6 @@ function RegistrarPacientes() {
           <button className="rp-button" type="submit">Registrar</button>
         </form>
       </div>
-    </MenuLayout>
   );
 }
 

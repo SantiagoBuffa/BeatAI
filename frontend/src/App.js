@@ -6,18 +6,50 @@ import Home from "./components/Home";
 import RegistrarPaciente from "./components/RegistrarPaciente";
 import VerPacientes from "./components/VerPacientes";
 import Historial from "./components/Historial";
+import MenuLayout from "./components/MenuLayout";
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Rutas sin layout (sin menú) */}
         <Route path="/" element={<Login />} />
         <Route path="/signup1" element={<SignUp1 />} />
         <Route path="/signup2" element={<SignUp2 />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/registrar" element={<RegistrarPaciente />} />
-        <Route path="/pacientes" element={<VerPacientes />} />
-        <Route path="/historial" element={<Historial />} />
+
+        {/* Rutas con layout (con menú lateral) */}
+        <Route
+          path="/home"
+          element={
+            <MenuLayout>
+              <Home />
+            </MenuLayout>
+          }
+        />
+        <Route
+          path="/registrar"
+          element={
+            <MenuLayout>
+              <RegistrarPaciente />
+            </MenuLayout>
+          }
+        />
+        <Route
+          path="/pacientes"
+          element={
+            <MenuLayout>
+              <VerPacientes />
+            </MenuLayout>
+          }
+        />
+        <Route
+          path="/historial"
+          element={
+            <MenuLayout>
+              <Historial />
+            </MenuLayout>
+          }
+        />
       </Routes>
     </Router>
   );
