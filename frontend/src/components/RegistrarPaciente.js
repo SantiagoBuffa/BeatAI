@@ -92,6 +92,18 @@ function RegistrarPacientes() {
             <div className="rp-insurance-grid">
 
               <div className="rp-form-group">
+                <label className="rp-label"> Nombre</label>
+                <input
+                  className="rp-input"
+                  type="text"
+                  name="insurance_name"
+                  value={formData.insurance_name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="rp-form-group">
                 <label className="rp-label"> Nro Afiliado</label>
                 <input
                   className="rp-input"
