@@ -22,6 +22,10 @@ function MenuLayout({ children }) {
             <i className="fa-solid fa-user"></i>
         </div>
 
+        <div className="profile-icon" onClick={() => navigate("/home")}>
+            <i className="fa-solid fa-house"></i>
+        </div>
+
         <div className="profile-icon" onClick={() => navigate("/ayuda")}>
             <i className="fa-solid fa-question"></i>
         </div>
