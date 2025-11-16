@@ -108,8 +108,8 @@ def get_diagnoses_by_patient(dni):
     return jsonify([
         {
             'id': d.id,
-            'descripcion': d.descripcion,
-            'ruta_ecg': d.ruta_ecg,
+            'result': d.result,
+            'ecg_route': d.ecg_route,
             'fecha': d.fecha.strftime('%Y-%m-%d %H:%M:%S')
         }
         for d in diagnoses
