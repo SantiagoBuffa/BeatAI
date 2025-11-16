@@ -98,13 +98,13 @@ def get_patient_by_dni(dni):
         }
     })
 
-@patient_bp.route('/patients/<string:dni>/diagnoses', methods=['GET'])
-def get_diagnoses_by_patient(dni):
+@patient_bp.route('/<string:dni>/diagnosis', methods=['GET'])
+def get_diagnosis_by_patient(dni):
     patient = Patient.query.filter_by(dni=dni).first()
     if not patient:
         return jsonify({'error': 'Paciente no encontrado'}), 404
 
-    diagnoses = Diagnosis.query.filter_by(patient_id=patient.id).all()
+    diagnosis_list = Diagnosis.query.filter_by(patient_id=patient.id).order_by(Diagnosis.fecha.desc()).all()
     return jsonify([
         {
             'id': d.id,
@@ -112,7 +112,7 @@ def get_diagnoses_by_patient(dni):
             'ecg_route': d.ecg_route,
             'fecha': d.fecha.strftime('%Y-%m-%d %H:%M:%S')
         }
-        for d in diagnoses
+        for d in diagnosis_list
     ])
 
 @patient_bp.route('/doctor/<string:doctor_dni>', methods=['GET'])
