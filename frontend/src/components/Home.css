@@ -73,6 +73,7 @@ body {
   overflow: hidden;
   transform: scale(0.95);
   transition: transform 0.35s ease;
+  cursor: pointer;
 }
 
 .upload-box.loaded {

@@ -6,6 +6,12 @@ function MenuLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Función para navegar y cerrar el sidebar
+  const handleNavigate = (path) => {
+    navigate(path);
+    setSidebarOpen(false);
+  };
+
   return (
     <div className="layout-wrapper">
 
@@ -15,15 +21,22 @@ function MenuLayout({ children }) {
           <div className="line"></div>
           <div className="line"></div>
           <div className="line"></div>
-          
-        </div>
-
-        <div className="profile-icon" onClick={() => navigate("/miperfil")}>
-            <i className="fa-solid fa-user"></i>
         </div>
 
         <div className="profile-icon" onClick={() => navigate("/home")}>
             <i className="fa-solid fa-house"></i>
+        </div>
+
+        <div className="profile-icon" onClick={() => navigate("/miperfil")}>
+          <i className="fa-solid fa-user-doctor" style={{fontSize: "1.2em" }}></i>
+        </div>
+
+        <div className="profile-icon" onClick={() => navigate("/pacientes")}>
+            <i className="fa-solid fa-users"></i>
+        </div>
+
+        <div className="profile-icon" onClick={() => navigate("/registrar")}>
+            <i className="fa-solid fa-user-plus"></i>
         </div>
 
         <div className="profile-icon" onClick={() => navigate("/ayuda")}>
@@ -33,20 +46,20 @@ function MenuLayout({ children }) {
         <div className="logout" onClick={() => navigate("/")}>
             <i className="fa-solid fa-right-from-bracket"></i>
         </div>
-
       </div>
 
       {/* Sidebar deslizable */}
       <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-content">
           <div className="menuu">- Menú -</div>
-          <button className="sidebar-button" onClick={() => navigate("/home")}>Inicio</button>
-          <button className="sidebar-button" onClick={() => navigate("/miperfil")}>Mi Perfil</button>
-          <button className="sidebar-button" onClick={() => navigate("/pacientes")}>Mis Pacientes</button>
-          <button className="sidebar-button" onClick={() => navigate("/registrar")}>Registrar Paciente</button>
+          <button className="sidebar-button" onClick={() => handleNavigate("/home")}>Inicio</button>
+          <button className="sidebar-button" onClick={() => handleNavigate("/miperfil")}>Mi Perfil</button>
+          <button className="sidebar-button" onClick={() => handleNavigate("/pacientes")}>Mis Pacientes</button>
+          <button className="sidebar-button" onClick={() => handleNavigate("/registrar")}>Registrar Paciente</button>
+          <button className="sidebar-button" onClick={() => handleNavigate("/ayuda")}>Ayuda</button>
 
           <div className="sidebar-bottom">
-            <button className="logout-btn" onClick={() => navigate("/")}>Cerrar sesión</button>
+            <button className="logout-btn" onClick={() => handleNavigate("/")}>Cerrar sesión</button>
           </div>
         </div>
       </div>
