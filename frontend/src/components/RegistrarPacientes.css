@@ -1,6 +1,6 @@
 /* Contenedor general */
 .rp-container {
-  max-width: 650px;
+  max-width: 1100px; /* más ancho para 2 columnas */
   margin: 40px auto;
   padding: 30px;
   background-color: #ffffff;
@@ -18,11 +18,27 @@
   margin-bottom: 25px;
 }
 
-/* Formulario general */
-.rp-form {
+/* Formulario en dos columnas */
+.rp-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+  .rp-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Columna izquierda y derecha */
+.rp-left-column, .rp-right-column {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 500px;
 }
 
 /* Labels */
@@ -32,28 +48,26 @@
 }
 
 /* Inputs */
-.rp-input {
+.rp-input, .rp-inputt {
   padding: 12px;
   font-size: 16px;
   border: 1px solid #a7dcd2;
-  background-color: #f4fafaff;   /* más claro */
   border-radius: 10px;
   transition: 0.3s ease;
+}
+
+.rp-input {
+  background-color: #f4fafaff;
 }
 
 .rp-inputt {
-  padding: 12px;
-  font-size: 16px;
-  border: 1px solid #a7dcd2;
-  background-color: white;   /* más claro */
-  border-radius: 10px;
-  transition: 0.3s ease;
+  background-color: white;
 }
 
-.rp-input:focus {
+
+.rp-input:focus, .rp-inputt:focus {
   outline: none;
   border-color: #00bfa5;
-  background-color: #ffffff;
   box-shadow: 0 0 6px rgba(0, 191, 165, 0.4);
 }
 
@@ -63,7 +77,7 @@
   border-radius: 12px;
   background-color: #f4fafaff;
   border: 1px solid #b5e6df;
-  margin-top: 10px;
+  height: 200px;
 }
 
 .rp-insurance-title {
@@ -73,29 +87,23 @@
   margin-bottom: 18px;
 }
 
-/* GRID dos columnas con más espacio */
 .rp-insurance-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 30px;   /* separación aumentada */
+  gap: 10px 30px;
   margin-top: 10px;
-}
-
-.rp-form-group {
-  display: flex;
-  flex-direction: column;
 }
 
 /* Botón */
 .rp-button {
+  grid-column: 1 / -1; /* ocupa las 2 columnas */
   margin-top: 20px;
-  padding: 14px;
+  padding: 12px;
   border: none;
   border-radius: 12px;
   background-color: #00bfa5;
   color: white;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 17px;
   cursor: pointer;
   transition: 0.3s ease;
 }
@@ -104,7 +112,7 @@
   background-color: #009e8d;
 }
 
-/* ---------- MODAL ---------- */
+/* Modal */
 .modal-bg {
   position: fixed;
   top: 0;
@@ -120,7 +128,7 @@
 
 .modal-box {
   background: white;
-  width: 320px;
+  width: 500px;
   padding: 25px;
   border-radius: 12px;
   text-align: center;
@@ -146,5 +154,3 @@
 .modal-btn:hover {
   opacity: 0.9;
 }
-
-

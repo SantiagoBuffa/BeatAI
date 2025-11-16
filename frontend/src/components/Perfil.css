@@ -20,6 +20,30 @@
   color: #00bfa5;
 }
 
+.modal-btn2 {
+  width: 250px;
+  justify-content: center;
+  padding: 12px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 40px;
+  background-color: #00bfa5;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;position: relative;      /* o fixed si querés que quede siempre visible */
+  left: 50%;               /* mueve el borde izquierdo al 50% del ancho de la pantalla */
+  transform: translateX(-50%); /* mueve el botón hacia atrás la mitad de su propio ancho */
+  margin-top: 20px;        /* espacio arriba */
+}
+
+.modal-btn2.cancel {
+  background-color: #00897b;
+}
+
+.modal-btn2:hover {
+  opacity: 0.9;
+}
+
 .perfil-info p {
   font-size: 18px;
   margin: 10px 0;

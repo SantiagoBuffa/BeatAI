@@ -11,13 +11,9 @@ function Perfil() {
     return null;
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/");
-  };
 
   return (
-    <div className="perfil-container">
+    <><div className="perfil-container">
       <div className="perfil-header">
         <div className="perfil-icon">
           <i className="fa-solid fa-user"></i>
@@ -32,8 +28,13 @@ function Perfil() {
         <p><strong>Email:</strong> {user.email}</p>
       </div>
 
-      
-    </div>
+
+    </div><button
+      className="modal-btn2 cancel"
+      onClick={() => navigate("/home")}
+    >
+        Volver a Inicio
+      </button></>
   );
 }
 

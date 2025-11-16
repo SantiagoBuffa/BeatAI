@@ -14,7 +14,7 @@ function RegistrarPacientes() {
     insurance_plan: "",
   });
 
-  const [showModal, setShowModal] = useState(false); // ⬅️ Modal
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -67,11 +67,10 @@ function RegistrarPacientes() {
       const data = await response.json();
 
       if (response.ok) {
-        setShowModal(true); // ⬅️ Muestra el modal
+        setShowModal(true);
       } else {
         alert(data.message || "Error al registrar");
       }
-
     } catch (err) {
       alert("Error registrando paciente");
     }
@@ -80,78 +79,83 @@ function RegistrarPacientes() {
   return (
     <>
       <div className="rp-container">
-        <h2 className="rp-title">Registrar Paciente</h2>
+        <h2 className="rp-title">Nuevo Paciente</h2>
 
-        <form className="rp-form" onSubmit={handleSubmit}>
-          <label className="rp-label">DNI</label>
-          <input
-            className="rp-input"
-            type="text"
-            name="dni"
-            value={formData.dni}
-            onChange={handleChange}
-            required
-          />
+        <form className="rp-form-grid" onSubmit={handleSubmit}>
+          {/* Columna izquierda */}
+          <div className="rp-left-column">
+            <label className="rp-label">DNI</label>
+            <input
+              className="rp-input"
+              type="number"
+              name="dni"
+              value={formData.dni}
+              onChange={handleChange}
+              required
+            />
 
-          <label className="rp-label">Nombre Completo</label>
-          <input
-            className="rp-input"
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+            <label className="rp-label">Nombre Completo</label>
+            <input
+              className="rp-input"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
 
-          <label className="rp-label">Fecha de Nacimiento</label>
-          <input
-            className="rp-input"
-            type="date"
-            name="date_of_birth"
-            value={formData.date_of_birth}
-            onChange={handleChange}
-            required
-          />
+            <label className="rp-label">Fecha de Nacimiento</label>
+            <input
+              className="rp-input"
+              type="date"
+              name="date_of_birth"
+              value={formData.date_of_birth}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          {/* --- OBRA SOCIAL --- */}
-          <div className="rp-insurance-box">
-            <div className="rp-insurance-title">Obra Social</div>
+          {/* Columna derecha */}
+          <div className="rp-right-column">
+            <div className="rp-insurance-box">
+              <div className="rp-insurance-title">Obra Social</div>
 
-            <div className="rp-insurance-grid">
-              <div className="rp-form-group">
-                <label className="rp-label"> Nombre</label>
-                <input
-                  className="rp-inputt"
-                  type="text"
-                  name="insurance_name"
-                  value={formData.insurance_name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <div className="rp-insurance-grid">
+                <div className="rp-form-group">
+                  <label className="rp-label">Nombre</label>
+                  <input
+                    className="rp-inputt"
+                    type="text"
+                    name="insurance_name"
+                    value={formData.insurance_name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
 
-              <div className="rp-form-group">
-                <label className="rp-label"> Nro Afiliado</label>
-                <input
-                  className="rp-inputt"
-                  type="text"
-                  name="insurance_member"
-                  value={formData.insurance_member}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+                <div className="rp-form-group">
+                  <label className="rp-label">Nro Afiliado</label>
+                  <input
+                    className="rp-inputt"
+                    type="text"
+                    name="insurance_member"
+                    value={formData.insurance_member}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
 
-              <div className="rp-form-group">
-                <label className="rp-label"> Plan</label>
-                <input
-                  className="rp-inputt"
-                  type="text"
-                  name="insurance_plan"
-                  value={formData.insurance_plan}
-                  onChange={handleChange}
-                  required
-                />
+                <div className="rp-form-group">
+                  <label className="rp-label">Plan</label>
+                  <input
+                    className="rp-inputt"
+                    type="text"
+                    name="insurance_plan"
+                    value={formData.insurance_plan}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -160,7 +164,15 @@ function RegistrarPacientes() {
         </form>
       </div>
 
-      {/* ------------ MODAL ------------ */}
+      {/* Botón de volver al inicio fuera del contenedor */}
+      <button
+        className="modal-btn2 cancel"
+        onClick={() => navigate("/home")}
+      >
+        Volver a Inicio
+      </button>
+
+      {/* Modal */}
       {showModal && (
         <div className="modal-bg">
           <div className="modal-box">
@@ -173,11 +185,11 @@ function RegistrarPacientes() {
                 setShowModal(false);
               }}
             >
-              Registrar otro
+              Registrar Nuevo Paciente
             </button>
 
             <button
-              className="modal-btn cancel"
+              className="modal-btn3 cancel"
               onClick={() => navigate("/home")}
             >
               Volver al inicio

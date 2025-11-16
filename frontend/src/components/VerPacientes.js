@@ -8,8 +8,9 @@ export default function VerPacientes() {
   const [pacientes, setPacientes] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [searchDni, setSearchDni] = useState("");
+  const [selectedPatient, setSelectedPatient] = useState(null); // NUEVO
 
-  // DNI del doctor logueado (guardado al iniciar sesión)
   const doctorDni = localStorage.getItem("doctor_dni");
 
   useEffect(() => {
@@ -32,39 +33,84 @@ export default function VerPacientes() {
       });
   }, [doctorDni]);
 
+  const filteredPacientes = pacientes.filter((p) =>
+    p.dni?.toString().includes(searchDni)
+  );
+
   return (
     <div className="patients-container">
-      <header className="app-header">
-        <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
+      <header className="app-header2">
+        <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo2" />
       </header>
 
       <main className="patients-main">
-        <h2>Mis Pacientes</h2>
+        <div className="title-search">
+          <h2>Mis Pacientes</h2>
+
+          <input
+            type="text"
+            placeholder="Buscar por DNI"
+            value={searchDni}
+            onChange={(e) => setSearchDni(e.target.value)}
+            className="search-input"
+          />
+        </div>
 
         {loading && <p>Cargando pacientes...</p>}
         {error && <p className="error-text">{error}</p>}
 
-        {!loading && pacientes.length === 0 && !error && (
-          <p>No tenés pacientes registrados.</p>
+        {!loading && filteredPacientes.length === 0 && !error && (
+          <p>No se encontraron pacientes.</p>
         )}
 
-        <ul className="patient-list">
-          {pacientes.map((p) => (
-            <li key={p.id} className="patient-item">
-              <strong>{p.name}</strong>  
-              <span>DNI: {p.dni}</span>
-              <span>Obra social: {p.health_insurance?.name || "—"}</span>
-            </li>
-          ))}
-        </ul>
+        <div className="patient-list-container">
+          <ul className="patient-list">
+            {filteredPacientes.map((p) => (
+              <li
+                key={p.id}
+                className="patient-item"
+                onClick={() => setSelectedPatient(p)} // NUEVO
+              >
+                <strong>{p.name}</strong>
+                <span>DNI: {p.dni}</span>
+                <span>Obra social: {p.health_insurance?.name || "—"}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        <button
-          className="upload-button"
-          onClick={() => navigate("/home")}
-        >
-          Volver
+        <button className="modal-btn3 cancel" onClick={() => navigate("/home")}>
+          Volver a Inicio
         </button>
       </main>
+
+      {/* MODAL */}
+      {selectedPatient && (
+        <div className="modal-overlay" onClick={() => setSelectedPatient(null)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h3>{selectedPatient.name}</h3>
+            <p><strong>DNI:</strong> {selectedPatient.dni}</p>
+            <p><strong>Obra social:</strong> {selectedPatient.health_insurance?.name || "—"}</p>
+
+           <div className="modal-buttons">
+            <button
+              className="modal-btn2"
+              onClick={() => navigate(`/historial/${selectedPatient.id}`)}
+            >
+              Ver Historial Clínico
+            </button>
+
+            <button
+              className="modal-btn2 close"
+              onClick={() => setSelectedPatient(null)}
+            >
+              Cerrar
+            </button>
+          </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }
