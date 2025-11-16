@@ -5,6 +5,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+from scipy.signal import medfilt
 import io
 import os
 import cv2
@@ -36,29 +37,170 @@ app.register_blueprint(patient_bp)
 
 # Ruta absoluta al modelo
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-MODEL_PATH = os.path.join(BASE_DIR, "models", "ecg_modelVectores2048.h5")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "ecg_modelVectorFinal.h5")
 
 # cargar el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
 
 predict_datagen = ImageDataGenerator(rescale=1./255)
 
-def preprocess_image(image_bytes):
-    img_height, img_width = 390, 550
+def load_image_rgb_from_bytes(image_bytes):
+    """Carga imagen desde bytes y la devuelve en B&W (0=negro, 255=blanco)."""
+    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    img = np.array(img)
+    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    _, bw = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    return bw
+
+
+def kmeans_1d_weighted(indices, weights, k=3, max_iter=100, tol=1e-3):
+    idx_min, idx_max = indices.min(), indices.max()
+    centers = np.linspace(idx_min, idx_max, k)
+
+    for _ in range(max_iter):
+        dists = np.abs(indices.reshape(-1,1) - centers.reshape(1,-1))
+        labels = dists.argmin(axis=1)
+
+        new_centers = np.zeros_like(centers)
+        for j in range(k):
+            mask = labels == j
+            if not np.any(mask):
+                new_centers[j] = centers[j]
+            else:
+                w = weights[mask]
+                idxs = indices[mask]
+                new_centers[j] = np.sum(idxs * w) / (np.sum(w) + 1e-9)
+
+        if np.max(np.abs(new_centers - centers)) < tol:
+            break
+
+        centers = new_centers
+
+    return np.sort(centers)
+
+
+def resize_vector(v, target_len):
+    x_old = np.linspace(0, 1, len(v))
+    x_new = np.linspace(0, 1, target_len)
+    return np.interp(x_new, x_old, v).astype(np.float32)
+
+
+def extract_roi_from_bw(img_bw, min_area=1000):
+    inverted_img = 255 - img_bw
+    contours, _ = cv2.findContours(inverted_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    if not contours:
+        return img_bw
+
+    big = max(contours, key=cv2.contourArea)
+    if cv2.contourArea(big) < min_area:
+        return img_bw
+
+    x, y, w_roi, h_roi = cv2.boundingRect(big)
+    return img_bw[y:y+h_roi, x:x+w_roi]
+
+
+def split_bw_image_by_projection(roi_bw, num_parts=3):
+    h, w = roi_bw.shape
+    inverted_img = 255 - roi_bw
+    proj = inverted_img.sum(axis=1).astype(float)
+
+    rows = np.arange(len(proj))
+    weights = proj / (proj.max() + 1e-9)
+
+    centers = kmeans_1d_weighted(rows, weights, k=num_parts)
+    centers = np.array(centers)
+
+    cuts = []
+    for i in range(len(centers)-1):
+        cuts.append(int(round((centers[i] + centers[i+1]) / 2)))
+
+    parts = []
+    start = 0
+    for c in cuts:
+        parts.append(roi_bw[start:c, :])
+        start = c
+    parts.append(roi_bw[start:h, :])
+
+    return parts
+
+
+def part_to_vector_simple(part_bw):
+    h, w = part_bw.shape
+    if h == 0 or w == 0:
+        return np.array([], dtype=float)
+
+    ys = np.zeros(w, dtype=float)
+
+    for col in range(w):
+        rows_on = np.where(part_bw[:, col] == 0)[0]
+        ys[col] = np.median(rows_on) if rows_on.size > 0 else np.nan
+
+    nans = np.isnan(ys)
+    if nans.all():
+        ys[:] = h / 2.0
+    elif nans.any():
+        not_nan = ~nans
+        xs = np.arange(w)
+        ys[nans] = np.interp(xs[nans], xs[not_nan], ys[not_nan])
+
+    ys = (h - 1) - ys
+    return ys
+
+
+def ecg_bw_bytes_to_vector(image_bytes, target_len=2048, num_parts=3):
+    """Versión final para usar en Flask."""
+    img_bw = load_image_rgb_from_bytes(image_bytes)
+    if img_bw is None:
+        return None
+
+    roi_bw = extract_roi_from_bw(img_bw)
+    parts = split_bw_image_by_projection(roi_bw, num_parts)
+
+    vecs = []
+
+    for p in parts:
+        v = part_to_vector_simple(p)
+        if v.size == 0: continue
+
+        baseline = np.nanmedian(v)
+        v = v - baseline if not np.isnan(baseline) else v
+
+        vecs.append(v)
+
+    if not vecs:
+        return None
+
+    full = np.concatenate(vecs)
+
+    mn, mx = np.nanmin(full), np.nanmax(full)
+    full = (full - mn) / (mx - mn) if mx - mn > 1e-6 else np.full_like(full, 0.5)
+
+    full = medfilt(full, kernel_size=3)
+
+    final = resize_vector(full, target_len)
+
+    return final
+
+
+
+
+#def preprocess_image(image_bytes):
+#    img_height, img_width = 390, 550
 
     # Leer directamente desde bytes
-    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    img = img.resize((img_width, img_height))
+#   img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+#    img = img.resize((img_width, img_height))
 
-    img_array = img_to_array(img)
+#    img_array = img_to_array(img)
 
     # Expandir dims para que parezca un batch de 1
-    img_array = np.expand_dims(img_array, axis=0)
+#    img_array = np.expand_dims(img_array, axis=0)
 
     # Aplicar el preprocesamiento EXACTO al de test_generator
-    img_array = predict_datagen.standardize(img_array)
+#    img_array = predict_datagen.standardize(img_array)
     
-    return img_array
+#    return img_array
 
 
 @app.route("/BeatAI",)
@@ -70,7 +212,14 @@ def predict():
 
     file = request.files["file"]
     img_bytes = file.read()
-    arr = preprocess_image(img_bytes)
+    #arr = preprocess_image(img_bytes)
+
+    vec = ecg_bw_bytes_to_vector(img_bytes, target_len=2048)
+    if vec is None:
+        return jsonify({"error": "Could not process ECG image"}), 400
+
+    # Convertimos a batch: (1, 2048, 1)
+    arr = vec.reshape(1, -1, 1)
 
     pred = model.predict(arr)
     class_id = int(np.argmax(pred))
