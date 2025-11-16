@@ -44,6 +44,8 @@ function Login() {
         email: data.email || "Sin email"
       }));
 
+      localStorage.setItem("doctor_dni", data.dni);
+
       navigate("/home");
     } catch (error) {
       console.error(error);

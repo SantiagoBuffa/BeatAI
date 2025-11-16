@@ -36,7 +36,7 @@ app.register_blueprint(patient_bp)
 
 # Ruta absoluta al modelo
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-MODEL_PATH = os.path.join(BASE_DIR, "models", "modelVGGV2.keras")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "ecg_modelVectores2048.h5")
 
 # cargar el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
