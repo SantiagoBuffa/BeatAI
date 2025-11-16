@@ -95,7 +95,7 @@ export default function VerPacientes() {
            <div className="modal-buttons">
             <button
               className="modal-btn2"
-              onClick={() => navigate(`/historial/${selectedPatient.id}`)}
+              onClick={() => navigate(`/historial/${selectedPatient.dni}`)}
             >
               Ver Historial Clínico
             </button>

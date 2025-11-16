@@ -53,7 +53,7 @@ function App() {
           }
         />
         <Route
-          path="/historial"
+          path="/historial/:dni"
           element={
             <MenuLayout>
               <Historial />

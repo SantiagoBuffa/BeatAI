@@ -78,6 +78,9 @@ function RegistrarPacientes() {
 
   return (
     <>
+      <header className="app-header2">
+        <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo2" />
+      </header>
       <div className="rp-container">
         <h2 className="rp-title">Nuevo Paciente</h2>
 
@@ -137,7 +140,7 @@ function RegistrarPacientes() {
                   <label className="rp-label">Nro Afiliado</label>
                   <input
                     className="rp-inputt"
-                    type="text"
+                    type="number"
                     name="insurance_member"
                     value={formData.insurance_member}
                     onChange={handleChange}
@@ -166,7 +169,7 @@ function RegistrarPacientes() {
 
       {/* Botón de volver al inicio fuera del contenedor */}
       <button
-        className="modal-btn2 cancel"
+        className="modal-btn3 cancel"
         onClick={() => navigate("/home")}
       >
         Volver a Inicio
@@ -189,7 +192,7 @@ function RegistrarPacientes() {
             </button>
 
             <button
-              className="modal-btn3 cancel"
+              className="modal-btn cancel"
               onClick={() => navigate("/home")}
             >
               Volver al inicio

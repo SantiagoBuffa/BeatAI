@@ -13,7 +13,10 @@ function Perfil() {
 
 
   return (
-    <><div className="perfil-container">
+    <>
+      <header className="app-header2">
+          <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo2" />
+      </header><div className="perfil-container">
       <div className="perfil-header">
         <div className="perfil-icon">
           <i className="fa-solid fa-user"></i>
@@ -30,7 +33,7 @@ function Perfil() {
 
 
     </div><button
-      className="modal-btn2 cancel"
+      className="modal-btn3 cancel"
       onClick={() => navigate("/home")}
     >
         Volver a Inicio
