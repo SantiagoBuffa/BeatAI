@@ -21,6 +21,8 @@
   padding: 40px 50px;
   box-shadow: 0 6px 18px rgba(0, 191, 165, 0.12);
   width: 400px;
+  margin-top: 40px;
+  height: 280px;
 }
 
 .login-main h2 {
@@ -55,7 +57,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 100%;
+  width: 350px;
   margin-bottom: 15px;
   position: relative;
   padding: 12px 20px;
@@ -89,7 +91,7 @@
 .error-text {
   color: #c62828;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin-top: -10px;
 }
 
 .logout-btn {
@@ -110,7 +112,7 @@
 }
 
 .signup-text {
-  font-size: 14px;
+  font-size: 15px;
   color: #004d40;
 }
 

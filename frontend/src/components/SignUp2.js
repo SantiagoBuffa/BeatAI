@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./SignUp.css";
+import "./SignUp2.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function SignUp2() {
@@ -76,7 +76,7 @@ function SignUp2() {
           className="signup-input"
         />
 
-        <div className="signup-grid">
+        <div className="signup2-grid">
           <input
             type="password"
             placeholder="Contraseña"
@@ -94,7 +94,7 @@ function SignUp2() {
         </div>
 
         <button className="upload-button" onClick={handleRegister} disabled={loading}>
-          {loading ? "Registrando..." : "Registrarse"}
+          {loading ? "Registrando..." : "REGISTRARSE"}
         </button>
       </main>
     </div>

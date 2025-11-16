@@ -29,7 +29,7 @@ function SignUp1() {
       </header>
 
       <main className="signup-main">
-        <h2>Registro</h2>
+        <h2>Registro - Paso 1</h2>
         {error && <p className="error-text">{error}</p>}
 
         <div className="signup-grid">
@@ -57,14 +57,14 @@ function SignUp1() {
           className="signup-input"
         />
 
-        <button className="upload-button" onClick={handleNext}>
-          Siguiente
+        <button className="upload-buttonn" onClick={handleNext}>
+          SIGUIENTE
         </button>
 
         <p className="signup-text">
-          ¿Ya tenés cuenta?{" "}
+          ¿Ya tienes cuenta?{" "}
           <span className="signup-link" onClick={() => navigate("/")}>
-            Iniciar sesión
+            Iniciar Sesión
           </span>
         </p>
       </main>

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,22 +31,27 @@ function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Credenciales incorrectas");
+        setError(data.error || "Matrícula o Contraseña Incorrecta");
         setLoading(false);
         return;
       }
-      localStorage.setItem("doctor_dni", data.dni);
+
+      // Guardamos datos en localStorage
+      localStorage.setItem("user", JSON.stringify({
+        dni: data.dni,
+        matricula: data.license || username,
+        nombreCompleto: data.name || "Sin nombre",
+        email: data.email || "Sin email"
+      }));
 
       navigate("/home");
-    }catch (error) {
+    } catch (error) {
       console.error(error);
       setError("Error al conectar con el servidor");
     } finally {
       setLoading(false);
     }
   };
-
-    
 
   return (
     <div className="login-container">
@@ -56,7 +60,7 @@ function Login() {
       </header>
 
       <main className="login-main">
-        <h2>Iniciar Sesión</h2>
+        <h2>Inicio de Sesión</h2>
         {error && <p className="error-text">{error}</p>}
 
         <input
@@ -80,15 +84,14 @@ function Login() {
           disabled={loading}
         >
           {loading ? "Ingresando..." : "INICIAR SESIÓN"}
-          {loading && <span className="btn-spinner" aria-hidden="true"></span>}
         </button>
 
-        <p className="signup-text">
+        <span className="signup-text">
           ¿No tienes cuenta?{" "}
           <span className="signup-link" onClick={() => navigate("/signup1")}>
             Registrarse
           </span>
-        </p>
+        </span>
       </main>
     </div>
   );

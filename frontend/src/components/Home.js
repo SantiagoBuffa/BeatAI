@@ -89,36 +89,37 @@ function Home() {
             onChange={(e) => handleFileUpload(e.target.files[0])}
           />
         </div>
-
-        <button
-          className={`upload-button ${!fileName ? "disabled" : ""} ${
-            loading ? "loading" : ""
-          }`}
-          disabled={!fileName || loading}
-          onClick={() =>
-            !fileName
-              ? document.getElementById("fileInput").click()
-              : handleAnalyze()
-          }
-        >
-          {loading ? "Analizando..." : "ANALIZAR ECG"}
-          {loading && <span className="btn-spinner" aria-hidden="true"></span>}
-        </button>
-
-        {preview && !loading && (
+        <div className="bottons">
           <button
-            className="secondary-button"
-            onClick={() => {
-              setPreview(null);
-              setFileName("");
-              setSelectedFile(null);
-              setDiagnosis(null);
-              document.getElementById("fileInput").click();
-            }}
+            className={`upload-button ${!fileName ? "disabled" : ""} ${
+              loading ? "loading" : ""
+            }`}
+            disabled={!fileName || loading}
+            onClick={() =>
+              !fileName
+                ? document.getElementById("fileInput").click()
+                : handleAnalyze()
+            }
           >
-            CARGAR OTRA IMAGEN
+            {loading ? "Analizando..." : "ANALIZAR ECG"}
+            {loading && <span className="btn-spinner" aria-hidden="true"></span>}
           </button>
-        )}
+
+          {preview && !loading && (
+            <button
+              className="secondary-button"
+              onClick={() => {
+                setPreview(null);
+                setFileName("");
+                setSelectedFile(null);
+                setDiagnosis(null);
+                document.getElementById("fileInput").click();
+              }}
+            >
+              CARGAR OTRA IMAGEN
+            </button>
+          )}
+        </div>
 
         {/* MODAL DE DIAGNÓSTICO */}
         {diagnosis && (

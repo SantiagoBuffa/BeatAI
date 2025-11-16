@@ -121,7 +121,7 @@ function RegistrarPacientes() {
               <div className="rp-form-group">
                 <label className="rp-label"> Nombre</label>
                 <input
-                  className="rp-input"
+                  className="rp-inputt"
                   type="text"
                   name="insurance_name"
                   value={formData.insurance_name}
@@ -133,7 +133,7 @@ function RegistrarPacientes() {
               <div className="rp-form-group">
                 <label className="rp-label"> Nro Afiliado</label>
                 <input
-                  className="rp-input"
+                  className="rp-inputt"
                   type="text"
                   name="insurance_member"
                   value={formData.insurance_member}
@@ -145,7 +145,7 @@ function RegistrarPacientes() {
               <div className="rp-form-group">
                 <label className="rp-label"> Plan</label>
                 <input
-                  className="rp-input"
+                  className="rp-inputt"
                   type="text"
                   name="insurance_plan"
                   value={formData.insurance_plan}

@@ -7,6 +7,8 @@ import RegistrarPaciente from "./components/RegistrarPaciente";
 import VerPacientes from "./components/VerPacientes";
 import Historial from "./components/Historial";
 import MenuLayout from "./components/MenuLayout";
+import Perfil from "./components/Perfil"; 
+
 
 function App() {
   return (
@@ -23,6 +25,14 @@ function App() {
           element={
             <MenuLayout>
               <Home />
+            </MenuLayout>
+          }
+        />
+        <Route
+          path="/miperfil"
+          element={
+            <MenuLayout>
+              <Perfil />
             </MenuLayout>
           }
         />
