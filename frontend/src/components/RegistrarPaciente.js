@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./RegistrarPacientes.css";
 
 function RegistrarPacientes() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     dni: "",
     name: "",
@@ -11,6 +14,8 @@ function RegistrarPacientes() {
     insurance_plan: "",
   });
 
+  const [showModal, setShowModal] = useState(false); // ⬅️ Modal
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -18,11 +23,21 @@ function RegistrarPacientes() {
     });
   };
 
+  const resetForm = () => {
+    setFormData({
+      dni: "",
+      name: "",
+      date_of_birth: "",
+      insurance_name: "",
+      insurance_member: "",
+      insurance_plan: "",
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const doctorDni = localStorage.getItem("doctor_dni");
-
     if (!doctorDni) {
       alert("Error: no se encontró el DNI del doctor. Volvé a iniciar sesión.");
       return;
@@ -50,13 +65,20 @@ function RegistrarPacientes() {
       );
 
       const data = await response.json();
-      alert(data.message);
+
+      if (response.ok) {
+        setShowModal(true); // ⬅️ Muestra el modal
+      } else {
+        alert(data.message || "Error al registrar");
+      }
+
     } catch (err) {
       alert("Error registrando paciente");
     }
   };
 
   return (
+    <>
       <div className="rp-container">
         <h2 className="rp-title">Registrar Paciente</h2>
 
@@ -137,6 +159,33 @@ function RegistrarPacientes() {
           <button className="rp-button" type="submit">Registrar</button>
         </form>
       </div>
+
+      {/* ------------ MODAL ------------ */}
+      {showModal && (
+        <div className="modal-bg">
+          <div className="modal-box">
+            <h3>Paciente registrado exitosamente</h3>
+
+            <button
+              className="modal-btn"
+              onClick={() => {
+                resetForm();
+                setShowModal(false);
+              }}
+            >
+              Registrar otro
+            </button>
+
+            <button
+              className="modal-btn cancel"
+              onClick={() => navigate("/home")}
+            >
+              Volver al inicio
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
