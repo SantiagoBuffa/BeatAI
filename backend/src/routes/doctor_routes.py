@@ -26,6 +26,14 @@ def register_doctor():
 def login_doctor():
     data = request.get_json()
     doctor = Doctor.query.filter_by(license=data['license']).first()
+    
     if doctor and check_password_hash(doctor.password_hash, data['password_hash']):
-        return jsonify({'message': 'Inicio de sesión exitoso', 'dni': doctor.dni}), 200
+        return jsonify({
+            'message': 'Inicio de sesión exitoso',
+            'dni': doctor.dni,
+            'name': doctor.name,
+            'email': doctor.email,
+            'license': doctor.license
+        }), 200
+
     return jsonify({'message': 'Credenciales inválidas'}), 401
