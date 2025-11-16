@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 import numpy as np
+from datetime import datetime
 from PIL import Image
 from scipy.signal import medfilt
+from werkzeug.utils import secure_filename
 import io
 import os
 import cv2
@@ -13,6 +13,22 @@ from src.models import Doctor, Patient, Diagnosis, HealthInsurance
 from src.database import db
 from src.routes.doctor_routes import doctor_bp
 from src.routes.patients_routes import patient_bp
+
+def save_diagnosis(dni, result, ecg_route):
+    patient = Patient.query.filter_by(dni=dni).first()
+    if not patient:
+        return False, "Paciente no encontrado"
+
+    diagnosis = Diagnosis(
+        patient_id=patient.id,
+        result=result,
+        ecg_route=ecg_route,
+        fecha=datetime.utcnow()
+    )
+    db.session.add(diagnosis)
+    db.session.commit()
+
+    return True, "Diagnóstico guardado"
 
 
 app = Flask(__name__)
@@ -42,9 +58,9 @@ MODEL_PATH = os.path.join(BASE_DIR, "models", "ecg_modelVectorFinal.h5")
 # cargar el modelo entrenado
 model = tf.keras.models.load_model(MODEL_PATH)
 
-predict_datagen = ImageDataGenerator(rescale=1./255)
 
-def load_image_rgb_from_bytes(image_bytes):
+#Cargar imagen desde bytes y convertir a blanco y negro
+def cargar_imagen_bn_desde_bytes(image_bytes):
     """Carga imagen desde bytes y la devuelve en B&W (0=negro, 255=blanco)."""
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     img = np.array(img)
@@ -52,7 +68,7 @@ def load_image_rgb_from_bytes(image_bytes):
     _, bw = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return bw
 
-
+# Divide el ECG en varias partes
 def kmeans_1d_weighted(indices, weights, k=3, max_iter=100, tol=1e-3):
     idx_min, idx_max = indices.min(), indices.max()
     centers = np.linspace(idx_min, idx_max, k)
@@ -78,14 +94,14 @@ def kmeans_1d_weighted(indices, weights, k=3, max_iter=100, tol=1e-3):
 
     return np.sort(centers)
 
-
-def resize_vector(v, target_len):
+# Ajusta la longitud del vector a longitud fija
+def ajustar_longitud(v, target_len):
     x_old = np.linspace(0, 1, len(v))
     x_new = np.linspace(0, 1, target_len)
     return np.interp(x_new, x_old, v).astype(np.float32)
 
-
-def extract_roi_from_bw(img_bw, min_area=1000):
+#Extrae la region principal, sacando lo que no sirve
+def recortar_zona_util(img_bw, min_area=1000):
     inverted_img = 255 - img_bw
     contours, _ = cv2.findContours(inverted_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -99,8 +115,8 @@ def extract_roi_from_bw(img_bw, min_area=1000):
     x, y, w_roi, h_roi = cv2.boundingRect(big)
     return img_bw[y:y+h_roi, x:x+w_roi]
 
-
-def split_bw_image_by_projection(roi_bw, num_parts=3):
+#Dividir el ECG en partes usando proyeccion horizontal
+def dividir_en_secciones(roi_bw, num_parts=3):
     h, w = roi_bw.shape
     inverted_img = 255 - roi_bw
     proj = inverted_img.sum(axis=1).astype(float)
@@ -124,8 +140,8 @@ def split_bw_image_by_projection(roi_bw, num_parts=3):
 
     return parts
 
-
-def part_to_vector_simple(part_bw):
+#Extrae cada parte en una curva 1D
+def extraer_curva_de_seccion(part_bw):
     h, w = part_bw.shape
     if h == 0 or w == 0:
         return np.array([], dtype=float)
@@ -147,20 +163,20 @@ def part_to_vector_simple(part_bw):
     ys = (h - 1) - ys
     return ys
 
-
+#Bytes a vector ECG listo para el modelo
 def ecg_bw_bytes_to_vector(image_bytes, target_len=2048, num_parts=3):
     """Versión final para usar en Flask."""
-    img_bw = load_image_rgb_from_bytes(image_bytes)
+    img_bw = cargar_imagen_bn_desde_bytes(image_bytes)
     if img_bw is None:
         return None
 
-    roi_bw = extract_roi_from_bw(img_bw)
-    parts = split_bw_image_by_projection(roi_bw, num_parts)
+    roi_bw = recortar_zona_util(img_bw)
+    parts = dividir_en_secciones(roi_bw, num_parts)
 
     vecs = []
 
     for p in parts:
-        v = part_to_vector_simple(p)
+        v = extraer_curva_de_seccion(p)
         if v.size == 0: continue
 
         baseline = np.nanmedian(v)
@@ -178,29 +194,10 @@ def ecg_bw_bytes_to_vector(image_bytes, target_len=2048, num_parts=3):
 
     full = medfilt(full, kernel_size=3)
 
-    final = resize_vector(full, target_len)
+    final = ajustar_longitud(full, target_len)
 
     return final
 
-
-
-
-#def preprocess_image(image_bytes):
-#    img_height, img_width = 390, 550
-
-    # Leer directamente desde bytes
-#   img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-#    img = img.resize((img_width, img_height))
-
-#    img_array = img_to_array(img)
-
-    # Expandir dims para que parezca un batch de 1
-#    img_array = np.expand_dims(img_array, axis=0)
-
-    # Aplicar el preprocesamiento EXACTO al de test_generator
-#    img_array = predict_datagen.standardize(img_array)
-    
-#    return img_array
 
 
 @app.route("/BeatAI",)
@@ -211,8 +208,22 @@ def predict():
         return jsonify({"error": "No file provided"}), 400
 
     file = request.files["file"]
-    img_bytes = file.read()
-    #arr = preprocess_image(img_bytes)
+    dni = request.form.get("dni")
+
+    if not dni:
+        return jsonify({"error": "DNI no enviado"}), 400
+    
+    # Guardar imagen en disco
+    filename = secure_filename(file.filename)
+    save_dir = "static/ecg_images"
+    os.makedirs(save_dir, exist_ok=True)
+
+    save_path = os.path.join(save_dir, filename)
+    file.save(save_path)
+
+    with open(save_path, "rb") as f:
+        img_bytes = f.read()
+
 
     vec = ecg_bw_bytes_to_vector(img_bytes, target_len=2048)
     if vec is None:
@@ -229,17 +240,32 @@ def predict():
                "ECG Images of Patient that have History of MI (172x12=2064)",
                "ECG Images of Patient that have abnormal heartbeat (233x12=2796)", 
                "Normal Person ECG Images (284x12=3408)" ]
+    
+
 
     if class_id < len(classes):
         class_name = classes[class_id]
     else:
         class_name = "Desconocido"
 
+    # ---- GUARDAR DIAGNÓSTICO ----
+    ok, msg = save_diagnosis(
+        dni=dni,
+        result=class_name,
+        ecg_route=save_path
+    )
+
+    if not ok:
+        return jsonify({"error": msg}), 404
+  
+
     return jsonify({
         "class": class_id,
         "class_name": class_name, 
-        "confidence": confidence
-        })
+        "confidence": confidence,
+        "ruta_ecg": save_path,
+        "message": "Diagnóstico guardado correctamente"
+    })
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
