@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DiagnosisModal from "./DiagnosisModal";
+import AlertModal from "./AlertModal";
 import "./Home.css";
 
 function Home() {
@@ -8,6 +9,9 @@ function Home() {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+
+  const [dni, setDni] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleFileUpload = async (file) => {
     if (!file) return;
@@ -27,11 +31,17 @@ function Home() {
   const handleAnalyze = async () => {
     if (!selectedFile) return;
 
+    if (!dni) {
+      setShowAlert(true);
+      return;
+    }
+
     setLoading(true);
     setDiagnosis(null);
 
     const formData = new FormData();
     formData.append("file", selectedFile);
+    formData.append("dni", dni);
 
     try {
       const response = await fetch("http://127.0.0.1:5000/predict", {
@@ -56,14 +66,13 @@ function Home() {
 
   return (
     <div className="App">
-      {/* HEADER */}
       <header className="app-header">
-    
         <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo" />
       </header>
 
-      {/* MAIN */}
       <main className="main-container">
+
+        {/* UPLOAD BOX */}
         <div
           className="upload-box"
           onClick={() => document.getElementById("fileInput").click()}
@@ -89,7 +98,22 @@ function Home() {
             onChange={(e) => handleFileUpload(e.target.files[0])}
           />
         </div>
+
+        {/* BOTONES y DNI — AHORA TODO CENTRADO */}
         <div className="bottons">
+
+          {/* DNI encima del botón */}
+          <div className="dni-container">
+            <label className="dni-label">DNI del Paciente</label>
+            <input
+              type="text"
+              placeholder="Ingrese DNI"
+              value={dni}
+              onChange={(e) => setDni(e.target.value)}
+              className="dni-input"
+            />
+          </div>
+
           <button
             className={`upload-button ${!fileName ? "disabled" : ""} ${
               loading ? "loading" : ""
@@ -121,11 +145,18 @@ function Home() {
           )}
         </div>
 
-        {/* MODAL DE DIAGNÓSTICO */}
+        {/* MODALES */}
         {diagnosis && (
           <DiagnosisModal
             diagnosis={diagnosis}
             onClose={() => setDiagnosis(null)}
+          />
+        )}
+
+        {showAlert && (
+          <AlertModal
+            message="Por favor ingresá el DNI del paciente antes de analizar."
+            onClose={() => setShowAlert(false)}
           />
         )}
       </main>
