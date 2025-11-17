@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./Ayuda.css";
 import MenuLayout from "./MenuLayout";
+import { useNavigate } from "react-router-dom";
 
 function Ayuda() {
+   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
 
   const toggle = (i) => {
@@ -57,6 +59,12 @@ function Ayuda() {
             ))}
           </div>
         </div>
+        <button
+        className="modal-btn3 cancel"
+        onClick={() => navigate("/home")}
+      >
+          Volver a Inicio
+        </button>
       </>
     </MenuLayout>
   );
