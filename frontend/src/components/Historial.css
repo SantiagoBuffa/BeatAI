@@ -1,21 +1,14 @@
-/* Contenedor general */
-.historial-container {
-  width: 100%;
-  min-height: 100vh;
-  background: #f4f4f4;
-  padding: 30px 0;
-  display: flex;
-  justify-content: center;
-}
-
 /* Caja blanca principal */
 .historial-box {
   background: white;
   width: 90%;
+  margin-top: 100px;
   max-width: 900px;
   padding: 30px;
   border-radius: 18px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  height: 330px;
+  justify-content: center;
 }
 
 /* Header */
@@ -24,13 +17,6 @@
   align-items: center;
   gap: 20px;
   margin-bottom: 25px;
-}
-
-/* Logo más chico */
-.beatai-logo3 {
-  width: 140px;
-  height: auto;
-  object-fit: contain;
 }
 
 .header-text h1 {
@@ -49,9 +35,9 @@
   text-align: center;
 }
 
-/* --- NUEVO: Zona scrollable --- */
+/* Zona scrollable */
 .diagnosis-scroll-area {
-  max-height: 60vh;
+  height: 250px;      /* ACTIVADOR DEL SCROLL */
   overflow-y: auto;
   padding-right: 12px;
 }
@@ -65,7 +51,7 @@
   align-items: center;
 }
 
-/* Tarjetas */
+/* Tarjeta diagnóstico */
 .diagnosis-card {
   width: 85%;
   max-width: 480px;
@@ -75,13 +61,15 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* Imagen ECG mucho más pequeña */
+/* Imagen ECG */
 .ecg-image {
-  width: 100%;
+  width: 150px;
+  height: 90px;
   max-width: 260px;
   border-radius: 8px;
   margin: 15px auto 0 auto;
   display: block;
+  cursor: pointer;
 }
 
 .no-image {
@@ -95,9 +83,9 @@
   margin-top: 10px;
 }
 
-/* Botón */
-.back-btn {
-  margin-top: 30px;
+/* Botón volver */
+.modal-btn3.cancel {
+  margin-top: 25px;
   padding: 12px 24px;
   font-size: 1rem;
   border-radius: 10px;
@@ -107,6 +95,40 @@
   cursor: pointer;
 }
 
-.back-btn:hover {
+.modal-btn3.cancel:hover {
   background-color: #009f8e;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-container {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.modal-image {
+  width: 60vw;   /* ancho más chico */
+  height: auto;
+  max-height: 80vh;
+  border-radius: 10px;
+}
+
+.ecg-image {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.ecg-image:hover {
+  transform: scale(1.03);
 }

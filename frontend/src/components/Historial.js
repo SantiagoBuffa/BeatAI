@@ -9,6 +9,8 @@ export default function Historial() {
   const [diagnosticos, setDiagnosticos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+
 
   useEffect(() => {
     fetch(`http://localhost:5000/patients/${dni}/diagnosis`)
@@ -28,22 +30,20 @@ export default function Historial() {
   }, [dni]);
 
   return (
-    <div className="historial-container">
+    <>
+      <header className="app-header2">
+        <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo2" />
+      </header>
 
-      {/* Caja blanca principal */}
       <div className="historial-box">
-
-        {/* Encabezado */}
         <header className="historial-header">
-          <img src="/beatAI_logo.png" alt="BeatAI Logo" className="beatai-logo3" />
           <div className="header-text">
-            <h1>Historial Clínico</h1>
+            <h2>Historial Clínico</h2>
             <h2>DNI {dni}</h2>
           </div>
         </header>
 
         <main className="historial-main">
-
           {loading && <p>Cargando historial...</p>}
           {error && <p className="error-text">{error}</p>}
 
@@ -51,7 +51,7 @@ export default function Historial() {
             <p>Este paciente no tiene diagnósticos registrados.</p>
           )}
 
-          {/* ZONA CON SCROLL */}
+          {/* zona con scroll */}
           <div className="diagnosis-scroll-area">
             <div className="diagnosis-grid">
               {diagnosticos.map((diag) => (
@@ -60,9 +60,11 @@ export default function Historial() {
 
                   {diag.ecg_route ? (
                     <img
-                      src={diag.ecg_route}
+                      src={`http://localhost:5000/${diag.ecg_route}`}
                       alt="ECG"
                       className="ecg-image"
+                      onClick={() => setSelectedImage(`http://localhost:5000/${diag.ecg_route}`)}
+                      style={{ cursor: "pointer" }}
                     />
                   ) : (
                     <p className="no-image">No se encontró imagen ECG.</p>
@@ -75,15 +77,19 @@ export default function Historial() {
               ))}
             </div>
           </div>
-
-          <button className="back-btn" onClick={() => navigate(-1)}>
-            Volver
-          </button>
-
         </main>
-
       </div>
+      {selectedImage && (
+      <div className="modal-overlay" onClick={() => setSelectedImage(null)}>
+        <div className="modal-container">
+          <img src={selectedImage} alt="ECG ampliado" className="modal-image" />
+        </div>
+      </div>
+      )}
 
-    </div>
+      <button className="modal-btn3 cancel" onClick={() => navigate("/pacientes")}>
+        Volver
+      </button>
+    </>
   );
 }
