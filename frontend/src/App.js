@@ -7,7 +7,9 @@ import RegistrarPaciente from "./components/RegistrarPaciente";
 import VerPacientes from "./components/VerPacientes";
 import Historial from "./components/Historial";
 import MenuLayout from "./components/MenuLayout";
-import Perfil from "./components/Perfil"; 
+import Perfil from "./components/Perfil";
+import Ayuda from "./components/Ayuda";
+
 
 
 function App() {
@@ -57,6 +59,14 @@ function App() {
           element={
             <MenuLayout>
               <Historial />
+            </MenuLayout>
+          }
+        />
+        <Route
+          path="/ayuda"
+          element={
+            <MenuLayout>
+              <Ayuda />
             </MenuLayout>
           }
         />
