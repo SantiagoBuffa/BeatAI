@@ -31,7 +31,14 @@ def save_diagnosis(dni, result, ecg_route):
     return True, "Diagnóstico guardado"
 
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # backend/
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+
+app = Flask(
+    __name__,
+    static_folder=STATIC_DIR,
+    static_url_path="/static"
+)
 CORS(app) # permite llamadas desde el frontend
 
 # Configuración de la base de datos SQLite
@@ -252,7 +259,7 @@ def predict():
     ok, msg = save_diagnosis(
         dni=dni,
         result=class_name,
-        ecg_route=save_path
+        ecg_route=f"static/ecg_images/{filename}"
     )
 
     if not ok:
