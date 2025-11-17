@@ -1,35 +1,63 @@
 .ayuda-container {
-  padding: 30px;
-  padding-left: 90px; /* para no chocar con la columna izquierda */
-  color: #004d40;
-  max-width: 900px;
+  padding: 20px;
 }
 
 .ayuda-title {
-  text-align: left;
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 25px;
-  color: #003d33;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-.ayuda-card {
+/* LISTA */
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* ITEM */
+.accordion-item {
+  width: 100%;
+  max-width: 650px;
   background: white;
-  opacity: 0.8;
-  padding: 20px 25px;
-  border-radius: 18px;
-  margin-bottom: 18px;
-  border-left: 6px solid #00bfa5;
+  padding: 18px 22px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.ayuda-card h2 {
-  margin: 0 0 10px 0;
-  font-size: 20px;
-  color: #00695c;
+/* HEADER */
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
 }
 
-.ayuda-card p {
-  margin: 0;
-  line-height: 1.5em;
-  font-size: 15.5px;
+/* Flecha */
+.chevron {
+  transition: transform 0.3s ease;
+  font-size: 18px;
+}
+
+.chevron.rotate {
+  transform: rotate(90deg);
+}
+
+/* WRAPPER que crece */
+.accordion-content-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.accordion-content-wrapper.open {
+  max-height: 300px; /* altura suficiente */
+}
+
+/* REAL CONTENT */
+.accordion-content {
+  padding-top: 12px;
+  color: #444;
+  font-size: 14px;
 }

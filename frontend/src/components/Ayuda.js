@@ -1,58 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Ayuda.css";
-import MenuLayout from "../components/MenuLayout";
+import MenuLayout from "./MenuLayout";
 
 function Ayuda() {
+  const [open, setOpen] = useState(null);
+
+  const toggle = (i) => {
+    setOpen(open === i ? null : i);
+  };
+
+  const items = [
+    {
+      title: "¿Cómo subir un ECG para analizarlo?",
+      text: "En la pantalla principal, seleccioná el botón 'Subir ECG'. Elegí la imagen desde tu dispositivo y luego presioná 'Analizar'. El sistema procesará automáticamente la señal."
+    },
+    {
+      title: "¿Cómo registrar un nuevo paciente?",
+      text: "Ingresá a 'Registrar Paciente' desde el menú. Completá los datos requeridos y presioná 'Registrar'."
+    },
+    {
+      title: "¿Cómo visualizar mis pacientes?",
+      text: "En 'Mis Pacientes' podés ver la lista, buscar por DNI y acceder al historial."
+    },
+    {
+      title: "¿Cómo editar mi perfil?",
+      text: "Ingresá a 'Mi Perfil' y presioná 'Editar'."
+    },
+    {
+      title: "¿Cómo ver el historial de un paciente?",
+      text: "Desde la lista de pacientes, seleccioná uno y presioná 'Ver Historial'."
+    }
+  ];
+
   return (
     <MenuLayout>
       <div className="ayuda-container">
-        <h1 className="ayuda-title">Guía de Uso</h1>
+        <h2 className="ayuda-title">Centro de Ayuda</h2>
 
-        <div className="ayuda-card">
-          <h2>▶ Cómo cargar un ECG</h2>
-          <p>
-            1. Desde el menú seleccioná <b>Inicio</b>.<br/>
-            2. Hacé clic en la caja blanca para seleccionar una imagen o arrastrala dentro.<br/>
-            3. Luego presioná <b>Analizar ECG</b>.<br/>
-            4. Una vez procesado, el resultado aparecerá en pantalla.
-          </p>
-        </div>
+        <div className="accordion">
+          {items.map((item, i) => (
+            <div key={i} className="accordion-item">
 
-        <div className="ayuda-card">
-          <h2>▶ Cómo ver tus pacientes</h2>
-          <p>
-            1. Desde el menú seleccioná <b>Mis Pacientes</b>.<br/>
-            2. Vas a ver una lista con todos los pacientes registrados.<br/>
-            3. Podés seleccionar uno para ver su historial y sus análisis previos.
-          </p>
-        </div>
+              <div className="accordion-header" onClick={() => toggle(i)}>
+                {item.title}
+                <span className={`chevron ${open === i ? "rotate" : ""}`}>
+                  ❯
+                </span>
+              </div>
 
-        <div className="ayuda-card">
-          <h2>▶ Registrar un nuevo paciente</h2>
-          <p>
-            1. En el menú elegí <b>Registrar Paciente</b>.<br/>
-            2. Completá los campos obligatorios: nombre, DNI, fecha de nacimiento, etc.<br/>
-            3. Guardá los datos para que el paciente quede registrado en tu base.
-          </p>
-        </div>
+              <div
+                className={`accordion-content-wrapper ${
+                  open === i ? "open" : ""
+                }`}
+              >
+                <div className="accordion-content">
+                  <p>{item.text}</p>
+                </div>
+              </div>
 
-        <div className="ayuda-card">
-          <h2>▶ Cómo se generan los diagnósticos</h2>
-          <p>
-            • El sistema analiza la imagen del ECG usando un modelo de IA entrenado.<br/>
-            • Identifica patrones comunes en arritmias y anomalías.<br/>
-            • El diagnóstico es una <b>sugerencia médica</b>, no reemplaza la evaluación del profesional.
-          </p>
-        </div>
-
-        <div className="ayuda-card">
-          <h2>▶ Consejos de uso</h2>
-          <p>
-            • Usar imágenes claras y bien recortadas del ECG.<br/>
-            • Evitar sombras o fotos borrosas.<br/>
-            • Guardar cada paciente para mantener un historial organizado.<br/>
-            • Revisar los diagnósticos junto con la historia clínica del paciente.
-          </p>
+            </div>
+          ))}
         </div>
       </div>
     </MenuLayout>
